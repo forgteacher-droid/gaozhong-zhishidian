@@ -176,22 +176,99 @@ img,svg{display:block}
 ::-webkit-scrollbar-thumb:hover{background:var(--text-light)}
 
 /* ===== RESPONSIVE ===== */
+/* Tablet (≤960px): hide header tabs, show hamburger menu, overlay sidebar */
 @media (max-width:960px){
   .toc-sidebar{display:none!important}
   .header-tabs{display:none}
   .menu-toggle{display:flex}
-  .sidebar{position:fixed;z-index:150;transform:translateX(-100%);box-shadow:var(--shadow)}
+  .sidebar{position:fixed;z-index:150;top:var(--header-h);left:0;height:calc(100vh - var(--header-h));transform:translateX(-100%);box-shadow:2px 0 12px rgba(0,0,0,.12);transition:transform .25s cubic-bezier(.4,0,.2,1);border-right:1px solid var(--border);border-radius:0}
   .sidebar.open{transform:translateX(0)}
-  .sidebar-backdrop{display:block;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.2)}
+  .sidebar-backdrop{display:block;position:fixed;inset:0;z-index:140;background:rgba(0,0,0,.25);opacity:0;transition:opacity .25s;pointer-events:none}
+  .sidebar-backdrop:not(.hidden){opacity:1;pointer-events:auto}
   .sidebar-backdrop.hidden{display:none}
-  .main-content{padding:24px 20px 80px;max-width:100%}
+  .main-content{padding:24px 20px 100px;max-width:100%}
+  /* Bottom nav bar for mobile */
+  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:120;background:var(--bg);border-top:1px solid var(--border);padding:6px 4px;padding-bottom:max(6px, env(safe-area-inset-bottom));justify-content:space-around;backdrop-filter:blur(10px)}
+  .bottom-nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;border-radius:8px;font-size:10px;color:var(--text-muted);min-width:48px;min-height:44px;justify-content:center;transition:all .2s}
+  .bottom-nav-btn.active{color:var(--chem);font-weight:600}
+  .bottom-nav-btn .bn-icon{font-size:20px;line-height:1}
 }
+
+/* Phone (≤640px): tighter spacing, smaller type, single-column */
 @media (max-width:640px){
-  .site-logo{font-size:16px}
-  .main-content{padding:20px 16px 80px}
-  .section-title{font-size:20px}
-  .subject-hero h1{font-size:26px}
-  .site-header{padding:0 12px}
+  :root{--header-h: 50px}
+  .site-logo{font-size:15px}
+  .site-logo span{display:none}
+  .main-content{padding:16px 14px 110px}
+  .section-title{font-size:19px;margin:28px 0 12px;padding-left:10px}
+  .subsection-title{font-size:16px;margin:18px 0 8px}
+  .subject-hero{padding:16px 0 20px;margin-bottom:20px}
+  .subject-hero-icon{font-size:36px}
+  .subject-hero h1{font-size:24px}
+  .subject-hero-desc{font-size:13px}
+  .block-header{font-size:12px;margin:16px 0 6px}
+  .content-block{font-size:14px}
+  .example-sentence{font-size:13px;padding:6px 10px}
+  .site-header{padding:0 10px;gap:8px}
+  .site-header .search-toggle,.site-header .theme-toggle,.site-header .menu-toggle{width:40px;height:40px;min-width:40px;min-height:40px}
+  /* Vocab grid single column */
+  .vocab-grid{grid-template-columns:1fr;gap:4px 0;margin:8px 0 20px}
+  .vocab-item{padding:6px 10px;font-size:14px}
+  .vocab-word{min-width:70px;font-size:14px}
+  .vocab-def{font-size:13px}
+  /* Shengyi table scrollable */
+  .shengyi-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:13px}
+  .shengyi-table th,.shengyi-table td{padding:6px 8px;white-space:nowrap}
+  .shengyi-table th{font-size:12px}
+  .shengyi-table td{font-size:13px}
+  /* Sidebar wider on mobile */
+  .sidebar{width:85vw;min-width:85vw;max-width:320px}
+  .sidebar summary{padding:8px 20px 8px 16px;font-size:15px}
+  .sidebar-sub-link{padding:6px 12px;font-size:14px}
+  /* Search full screen */
+  .search-overlay{padding-top:0;align-items:stretch}
+  .search-modal{width:100%;max-width:100%;border-radius:0;border:none;height:100vh;display:flex;flex-direction:column}
+  .search-input-wrap{padding:12px 16px}
+  .search-input-wrap input{font-size:16px}
+  .search-results{max-height:none;flex:1}
+  .search-result{padding:12px 16px}
+  .search-result-title{font-size:15px}
+  .search-input-wrap kbd{display:none}
+  /* Placeholder */
+  .placeholder-page{padding:60px 16px}
+  .placeholder-icon{font-size:48px}
+  .placeholder-page h2{font-size:24px}
+}
+
+/* Extra small (≤380px) */
+@media (max-width:380px){
+  .main-content{padding:12px 10px 110px}
+  .section-title{font-size:18px}
+  .subject-hero h1{font-size:22px}
+  .bottom-nav-btn{font-size:9px;padding:2px 4px;min-width:40px}
+  .bottom-nav-btn .bn-icon{font-size:18px}
+}
+
+/* Touch-friendly: ensure all interactive elements >= 44px */
+@media (pointer:coarse){
+  .sidebar summary{padding:10px 20px 10px 16px;min-height:44px}
+  .sidebar-sub-link{padding:8px 12px;min-height:44px;display:flex;align-items:center}
+  .search-result{padding:12px 16px;min-height:44px}
+  .header-tab{padding:8px 16px;min-height:44px}
+  .vocab-item{padding:7px 10px}
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion:reduce){
+  .sidebar{transition:none}
+  .sidebar-backdrop{transition:none}
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+/* ===== BOTTOM NAV (hidden on desktop) ===== */
+.bottom-nav{display:none}
+@media (max-width:960px){
+  .bottom-nav{display:flex}
 }
 
 /* ===== VOCABULARY ===== */
@@ -239,6 +316,9 @@ img,svg{display:block}
   <main class="main-content" id="mainContent"></main>
 </div>
 
+<!-- BOTTOM NAV (mobile only) -->
+<nav class="bottom-nav" id="bottomNav"></nav>
+
 <!-- SEARCH OVERLAY -->
 <div class="search-overlay" id="searchOverlay">
   <div class="search-modal">
@@ -278,10 +358,12 @@ let searchIndex = [];
 // ===== INIT =====
 function init(){
   buildHeaderTabs();
+  buildBottomNav();
   switchSubject('chemistry');
   setupTheme();
   setupSearch();
   setupMenu();
+  setupTouchGestures();
   // Restore last subject
   try {
     const saved = localStorage.getItem('kg-subject');
@@ -311,7 +393,12 @@ function switchSubject(subj){
   document.querySelectorAll('.header-tab').forEach(function(t){
     t.classList.toggle('active', t.getAttribute('data-subject') === subj);
   });
-  
+
+  // Update bottom nav
+  document.querySelectorAll('.bottom-nav-btn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-subject') === subj);
+  });
+
   // Update sidebar
   document.getElementById('sidebarHeader').textContent = s.icon + ' ' + s.name + ' 目录';
   document.getElementById('sidebarNav').innerHTML = NAV[subj] || '<div class="sidebar-empty">暂无目录</div>';
@@ -576,6 +663,52 @@ function setupMenu(){
 
 // ===== START =====
 document.addEventListener('DOMContentLoaded', init);
+
+// ===== BOTTOM NAV =====
+function buildBottomNav(){
+  var nav = document.getElementById('bottomNav');
+  var subjects = [
+    ['chemistry','⚗️','化学'],
+    ['math','📐','数学'],
+    ['physics','⚡','物理'],
+    ['biology','🧬','生物'],
+    ['english','📖','英语'],
+    ['chinese','📝','语文']
+  ];
+  nav.innerHTML = subjects.map(function(s){
+    return '<button class="bottom-nav-btn" data-subject="' + s[0] + '" onclick="switchSubject(\'' + s[0] + '\')"><span class="bn-icon">' + s[1] + '</span>' + s[2] + '</button>';
+  }).join('');
+}
+
+// ===== TOUCH GESTURES =====
+function setupTouchGestures(){
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var sidebar = document.getElementById('sidebar');
+  var backdrop = document.getElementById('sidebarBackdrop');
+
+  document.addEventListener('touchstart', function(e){
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, {passive: true});
+
+  document.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+
+    // Swipe right from left edge to open sidebar
+    if(dx > 60 && dy < dx * 0.7 && touchStartX < 40 && window.innerWidth <= 960){
+      sidebar.classList.add('open');
+      backdrop.classList.remove('hidden');
+    }
+
+    // Swipe left to close sidebar
+    if(dx < -40 && dy < Math.abs(dx) * 0.7 && sidebar.classList.contains('open')){
+      sidebar.classList.remove('open');
+      backdrop.classList.add('hidden');
+    }
+  }, {passive: true});
+}
 
 </script>
 </body>
