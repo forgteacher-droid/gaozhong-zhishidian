@@ -404,7 +404,7 @@ async function switchSubject(subj){
   // Show loading indicator
   var main = document.getElementById('mainContent');
   if (!DATA_LOADED[subj]) {
-    main.innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text-muted)"><div style="font-size:36px;margin-bottom:12px">⏳</div><p>正在加载' + SUBJECTS[subj].name + '知识点...</p></div>';
+    main.innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text-muted)"><div style="font-size:36px;margin-bottom:12px">⏳</div><p>正在加载' + SUBJECTS[subj].name + '知识点...</p></div>';;
   }
   
   // Load data if needed
@@ -525,63 +525,45 @@ function setupSearch(){
       return item.text.toLowerCase().indexOf(q) !== -1 || item.subjectName.toLowerCase().indexOf(q) !== -1;
     });
     
-    // Cross-subject search
+    // Cross-subject search — load data if needed, then search
     if(matches.length < 5){
-      for(var subj in SUBJECTS){
-        if(subj === currentSubject || SUBJECTS[subj].placeholder) continue;
-        var c = CONTENT[subj] || '';
-        var lower = c.toLowerCase();
-        var idx = lower.indexOf(q);
-        var count = 0;
-        while(idx !== -1 && count < 5){
-          var start = Math.max(0, idx - 30);
-          var end = Math.min(c.length, idx + q.length + 60);
-          var ctx = c.substring(start, end).replace(/<[^>]+>/g, '');
-          if(ctx.length > 0){
-            matches.push({
-              type: 'cross-subject',
-              text: ctx.substring(0, 100),
-              subject: subj,
-              subjectName: SUBJECTS[subj].name,
-              id: null
-            });
+      var otherSubjects = Object.keys(SUBJECTS).filter(function(s){ return s !== currentSubject && !SUBJECTS[s].placeholder; });
+
+      // Search all other subjects
+      Promise.all(otherSubjects.map(function(subj){
+        return loadSubjectData(subj).then(function(){
+          var c = CONTENT[subj] || '';
+          var lower = c.toLowerCase();
+          var idx = lower.indexOf(q);
+          var count = 0;
+          var subjMatches = [];
+          while(idx !== -1 && count < 5){
+            var start = Math.max(0, idx - 30);
+            var end = Math.min(c.length, idx + q.length + 60);
+            var ctx = c.substring(start, end).replace(/<[^>]+>/g, '');
+            if(ctx.length > 0){
+              subjMatches.push({
+                type: 'cross-subject',
+                text: ctx.substring(0, 100),
+                subject: subj,
+                subjectName: SUBJECTS[subj].name,
+                id: null
+              });
+            }
+            count++;
+            idx = lower.indexOf(q, idx + 1);
           }
-          count++;
-          idx = lower.indexOf(q, idx + 1);
-        }
-      }
-    }
-    
-    matches = matches.slice(0, 30);
-    
-    if(matches.length === 0){
-      results.innerHTML = '<div class="search-no-results">未找到相关结果</div>';
-    } else {
-      results.innerHTML = matches.map(function(m, i){
-        return '<div class="search-result' + (i===0?' focus':'') + '" data-subject="' + m.subject + '" data-id="' + (m.id||'') + '">' +
-          '<div class="search-result-title">' + highlightMatch(m.text, q, 60) + '</div>' +
-          '<div class="search-result-context">' + (m.type === 'cross-subject' ? '跨科目搜索' : m.type === 'section' ? '板块' : m.type === 'subsection' ? '小节' : '内容') + '</div>' +
-          '<div class="search-result-subject">' + m.subjectName + '</div>' +
-        '</div>';
-      }).join('');
-      
-      results.querySelectorAll('.search-result').forEach(function(el){
-        el.onclick = function(){
-          var subj = el.getAttribute('data-subject');
-          var id = el.getAttribute('data-id');
-          closeSearch();
-          if(subj !== currentSubject) switchSubject(subj);
-          if(id){
-            setTimeout(function(){
-              var target = document.getElementById(id);
-              if(target) target.scrollIntoView({behavior:'smooth'});
-            }, 200);
-          }
-        };
+          return subjMatches;
+        });
+      })).then(function(results){
+        results.forEach(function(r){ matches = matches.concat(r); });
+        renderSearchResults(matches.slice(0, 30), q);
       });
+      return;
     }
+
+    renderSearchResults(matches.slice(0, 30), q);
   };
-  
   input.onkeydown = function(e){
     if(e.key === 'Escape') closeSearch();
     if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
@@ -600,6 +582,36 @@ function setupSearch(){
       if(focused) focused.click();
     }
   };
+
+  // Extracted helper
+  function renderSearchResults(matches, q){
+    if(matches.length === 0){
+      results.innerHTML = '<div class="search-no-results">未找到相关结果</div>';
+    } else {
+      results.innerHTML = matches.map(function(m, i){
+        return '<div class="search-result' + (i===0?' focus':'') + '" data-subject="' + m.subject + '" data-id="' + (m.id||'') + '">' +
+          '<div class="search-result-title">' + highlightMatch(m.text, q, 60) + '</div>' +
+          '<div class="search-result-context">' + (m.type === 'cross-subject' ? '跨科目搜索' : m.type === 'section' ? '板块' : m.type === 'subsection' ? '小节' : '内容') + '</div>' +
+          '<div class="search-result-subject">' + m.subjectName + '</div>' +
+        '</div>';
+      }).join('');
+
+      results.querySelectorAll('.search-result').forEach(function(el){
+        el.onclick = function(){
+          var subj = el.getAttribute('data-subject');
+          var id = el.getAttribute('data-id');
+          closeSearch();
+          if(subj !== currentSubject) switchSubject(subj);
+          if(id){
+            setTimeout(function(){
+              var target = document.getElementById(id);
+              if(target) target.scrollIntoView({behavior:'smooth'});
+            }, 400);
+          }
+        };
+      });
+    }
+  }
 }
 
 function highlightMatch(text, query, maxLen){
