@@ -526,6 +526,10 @@ function setupTocToggle(){
 let searchIndex = [];
 
 async function init(){
+  // Check URL parameter for subject override
+  var params = new URLSearchParams(window.location.search);
+  var urlSubject = params.get('subject');
+
   setupTheme();
   await loadAllData();
   renderAll();
@@ -534,6 +538,14 @@ async function init(){
   setupSearch();
   setupBackTop();
   setupTocToggle();
+
+  // If URL has subject parameter, scroll to that subject
+  if(urlSubject && SUBJECTS_DATA[urlSubject]){
+    setTimeout(function(){
+      var el = document.getElementById('hero-' + urlSubject);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    }, 300);
+  }
 }
 document.addEventListener('DOMContentLoaded', init);
 

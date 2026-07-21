@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>高中知识点集合</title>
+<meta name="description" content="高中语文·数学·英语·物理·化学·生物六科知识点集合网站">
+<style>
+:root {
+  --bg: #fafaf8;
+  --text: #1a1a1c;
+  --text-muted: #6b6b6e;
+  --chinese: #C4523B;
+  --math: #4E5283;
+  --english: #C44D6A;
+  --physics: #B87D3C;
+  --chemistry: #2D7B8C;
+  --biology: #3D7A4A;
+}
+html.dark {
+  --bg: #1a1b1e;
+  --text: #e8e6e0;
+  --text-muted: #a0a0a4;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-font-smoothing:antialiased;
+  transition:background .3s,color .3s;
+}
+.container{text-align:center;padding:40px 24px;max-width:720px;width:100%}
+h1{
+  font-family:"Noto Serif SC","STSong","Songti SC",Georgia,serif;
+  font-size:36px;font-weight:800;letter-spacing:.04em;margin-bottom:48px;
+}
+.grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  justify-items:center;
+}
+.card{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:140px;height:140px;border-radius:18px;
+  background:var(--bg);border:1px solid #e2ded6;
+  cursor:pointer;text-decoration:none;color:var(--text);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+html.dark .card{border-color:#3a3b3f;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.card:hover{transform:scale(1.12);box-shadow:0 8px 30px rgba(0,0,0,.1)}
+.card-icon{font-size:40px;margin-bottom:8px;transition:transform .3s}
+.card:hover .card-icon{transform:scale(1.1)}
+.card-label{font-size:17px;font-weight:600;letter-spacing:.03em}
+.card-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+
+/* Theme toggle */
+.theme-toggle{
+  position:fixed;top:16px;right:16px;z-index:10;
+  width:36px;height:36px;border-radius:50%;border:none;background:none;
+  cursor:pointer;color:var(--text-muted);font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.theme-toggle:hover{background:rgba(0,0,0,.05)}
+html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
+
+/* Footer */
+.footer{
+  margin-top:48px;font-size:12px;color:var(--text-muted);
+  letter-spacing:.04em;
+}
+
+/* Mobile */
+@media (max-width:500px){
+  h1{font-size:28px;margin-bottom:36px}
+  .grid{gap:14px}
+  .card{width:100px;height:100px;border-radius:14px}
+  .card-icon{font-size:30px}
+  .card-label{font-size:14px}
+  .card-sub{font-size:10px}
+}
+@media (max-width:360px){
+  .grid{grid-template-columns:repeat(3,1fr);gap:10px}
+  .card{width:88px;height:88px}
+  .card-icon{font-size:26px}
+  .card-label{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" aria-label="切换主题" title="切换暗色模式">🌓</button>
+
+<div class="container">
+  <h1>高中知识点集合</h1>
+  <div class="grid">
+    <a href="index.html?subject=chinese" class="card" style="border-bottom:3px solid var(--chinese)">
+      <span class="card-icon">📝</span>
+      <span class="card-label" style="color:var(--chinese)">语文</span>
+      <span class="card-sub">背诵 · 实词 · 答题</span>
+    </a>
+    <a href="index.html?subject=math" class="card" style="border-bottom:3px solid var(--math)">
+      <span class="card-icon">📐</span>
+      <span class="card-label" style="color:var(--math)">数学</span>
+      <span class="card-sub">公式 · 二级结论</span>
+    </a>
+    <a href="index.html?subject=english" class="card" style="border-bottom:3px solid var(--english)">
+      <span class="card-icon">📖</span>
+      <span class="card-label" style="color:var(--english)">英语</span>
+      <span class="card-sub">词汇 · 语法 · 写作</span>
+    </a>
+    <a href="index.html?subject=physics" class="card" style="border-bottom:3px solid var(--physics)">
+      <span class="card-icon">⚡</span>
+      <span class="card-label" style="color:var(--physics)">物理</span>
+      <span class="card-sub">公式 · 二级结论</span>
+    </a>
+    <a href="index.html?subject=chemistry" class="card" style="border-bottom:3px solid var(--chemistry)">
+      <span class="card-icon">⚗️</span>
+      <span class="card-label" style="color:var(--chemistry)">化学</span>
+      <span class="card-sub">方程式 · 实验</span>
+    </a>
+    <a href="index.html?subject=biology" class="card" style="border-bottom:3px solid var(--biology)">
+      <span class="card-icon">🧬</span>
+      <span class="card-label" style="color:var(--biology)">生物</span>
+      <span class="card-sub">遗传 · 实验 · 试剂</span>
+    </a>
+  </div>
+  <div class="footer">FROG 教育 · 助力高考</div>
+</div>
+
+<script>
+// Theme toggle
+(function(){
+  var btn = document.getElementById('themeToggle');
+  function setTheme(dark){
+    document.documentElement.classList.toggle('dark',dark);
+    btn.textContent = dark ? '☀️' : '🌓';
+    try{localStorage.setItem('home-theme',dark?'dark':'light')}catch(e){}
+  }
+  var saved = localStorage.getItem('home-theme');
+  if(saved){setTheme(saved==='dark')}
+  else{setTheme(window.matchMedia('(prefers-color-scheme:dark)').matches)}
+  btn.onclick = function(){setTheme(!document.documentElement.classList.contains('dark'))};
+})();
+</script>
+</body>
+</html>
