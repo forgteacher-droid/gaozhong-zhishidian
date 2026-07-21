@@ -130,6 +130,88 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
   <div class="footer">FROG 教育 · 助力高考</div>
 </div>
 
+<!-- Frog SVG - side view silhouette -->
+<svg class="frog" viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- body: oval tilted slightly for realistic posture -->
+  <ellipse cx="62" cy="62" rx="38" ry="20" fill="#7CB342" stroke="#33691E" stroke-width="2"/>
+  <!-- belly -->
+  <ellipse cx="66" cy="64" rx="20" ry="12" fill="#C5E1A5"/>
+
+  <!-- back leg (folded, ready to jump) -->
+  <path d="M28,58 Q10,40 18,70 Q22,85 35,78 L42,68" fill="#689F38" stroke="#33691E" stroke-width="2" stroke-linejoin="round"/>
+  <!-- back foot -->
+  <path d="M18,70 L6,72 Q4,78 8,80 L18,76" fill="#558B2F" stroke="#33691E" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- front leg (near side, extended forward) -->
+  <path d="M85,70 Q100,68 108,75 Q112,82 108,86 L98,84 L92,76" fill="#7CB342" stroke="#33691E" stroke-width="2" stroke-linejoin="round"/>
+  <!-- front foot toes -->
+  <path d="M108,86 Q115,84 118,88 M108,86 Q112,90 114,94 M108,86 Q108,90 106,93" fill="none" stroke="#33691E" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- head: pointed snout facing right -->
+  <path d="M90,45 Q110,30 130,40 Q135,42 133,48 Q130,55 120,58 Q105,60 90,55 Z" fill="#8BC34A" stroke="#33691E" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- eye (bulging on top) -->
+  <ellipse cx="108" cy="35" rx="10" ry="11" fill="white" stroke="#33691E" stroke-width="1.8"/>
+  <circle cx="110" cy="34" r="5.5" fill="#212121"/>
+  <circle cx="112" cy="32" r="2" fill="white"/>
+
+  <!-- mouth line -->
+  <path d="M130,44 Q138,46 134,50" fill="none" stroke="#33691E" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- nostril -->
+  <circle cx="130" cy="42" r="1.5" fill="#33691E"/>
+
+  <!-- back leg (far side, behind body) -->
+  <path d="M50,55 Q42,38 48,58" fill="none" stroke="#689F38" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- skin texture spots -->
+  <circle cx="55" cy="55" r="3" fill="#689F38" opacity="0.5"/>
+  <circle cx="72" cy="52" r="4" fill="#689F38" opacity="0.4"/>
+  <circle cx="85" cy="58" r="2.5" fill="#689F38" opacity="0.5"/>
+  <circle cx="60" cy="70" r="2" fill="#689F38" opacity="0.4"/>
+</svg>
+
+<style>
+.frog{
+  position:fixed;bottom:14px;left:0;width:55px;height:auto;z-index:100;
+  pointer-events:none;
+  animation:frogHop 13s ease-in-out infinite alternate;
+}
+@keyframes frogHop{
+  0%{left:0;transform:scaleX(1) translateY(0) rotate(0deg)}
+  3%{left:4%;transform:scaleX(1) translateY(-14px) rotate(-3deg)}
+  5%{left:8%;transform:scaleX(1) translateY(-4px) rotate(0deg)}
+  10%{left:16%;transform:scaleX(1) translateY(0) rotate(1deg)}
+  13%{left:20%;transform:scaleX(1) translateY(-12px) rotate(-2deg)}
+  16%{left:25%;transform:scaleX(1) translateY(-1px) rotate(0deg)}
+  20%{left:33%;transform:scaleX(1) translateY(0) rotate(0deg)}
+  23%{left:37%;transform:scaleX(1) translateY(-10px) rotate(2deg)}
+  26%{left:42%;transform:scaleX(1) translateY(-2px) rotate(0deg)}
+  30%{left:50%;transform:scaleX(1) translateY(0) rotate(-1deg)}
+  33%{left:54%;transform:scaleX(1) translateY(-8px) rotate(0deg)}
+  36%{left:59%;transform:scaleX(1) translateY(-1px) rotate(1deg)}
+  40%{left:67%;transform:scaleX(1) translateY(0) rotate(0deg)}
+  43%{left:71%;transform:scaleX(1) translateY(-6px) rotate(-1deg)}
+  46%{left:77%;transform:scaleX(1) translateY(-1px) rotate(0deg)}
+  50%{left:calc(100% - 60px);transform:scaleX(1) translateY(0) rotate(0deg)}
+  /* turn around */
+  52%{left:calc(100% - 60px);transform:scaleX(-1) translateY(0) rotate(0deg)}
+  55%{left:77%;transform:scaleX(-1) translateY(-10px) rotate(2deg)}
+  58%{left:67%;transform:scaleX(-1) translateY(-2px) rotate(0deg)}
+  63%{left:54%;transform:scaleX(-1) translateY(0) rotate(0deg)}
+  66%{left:42%;transform:scaleX(-1) translateY(-8px) rotate(-1deg)}
+  70%{left:33%;transform:scaleX(-1) translateY(0) rotate(0deg)}
+  75%{left:20%;transform:scaleX(-1) translateY(-6px) rotate(1deg)}
+  80%{left:12%;transform:scaleX(-1) translateY(-1px) rotate(0deg)}
+  88%{left:4%;transform:scaleX(-1) translateY(-9px) rotate(0deg)}
+  95%{left:1%;transform:scaleX(1) translateY(-2px) rotate(0deg)}
+  100%{left:0;transform:scaleX(1) translateY(0) rotate(0deg)}
+}
+@media (max-width:500px){
+  .frog{width:42px;bottom:8px}
+}
+</style>
+
 <script>
 // Theme toggle
 (function(){
