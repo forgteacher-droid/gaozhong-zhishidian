@@ -454,11 +454,11 @@ let searchIndex = [];
 
 async function init(){
   setupTheme();
-  setupBottomNav();
-  setupSearch();
   await loadAllData();
   renderAll();
   buildTOC();
+  setupBottomNav();
+  setupSearch();
   setupBackTop();
 }
 document.addEventListener('DOMContentLoaded', init);
@@ -483,11 +483,13 @@ function setupBottomNav(){
 
   // Click to scroll
   nav.querySelectorAll('.bottom-nav-btn').forEach(function(btn){
-    btn.onclick = function(){
+    btn.onclick = function(e){
+      e.preventDefault();
       var subj = btn.getAttribute('data-subj');
       var el = document.getElementById('hero-' + subj);
-      if(el) el.scrollIntoView({behavior:'smooth'});
-      window.scrollBy(0, -70);
+      if(el) {
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+      }
     };
   });
 }
