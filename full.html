@@ -158,19 +158,112 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .back-top.show{opacity:1;pointer-events:auto}
 .back-top:hover{background:var(--bg-hover)}
 
+/* ===== RESPONSIVE ===== */
+
+/* Tablet: ≤860px — hide sidebar, show bottom nav */
 @media (max-width:860px){
   .sidebar-toc{display:none}
-  .main-content{padding:24px 20px 80px;max-width:100%}
-  .site-header{padding:0 12px;gap:10px}
+  .main-content{padding:20px 24px 100px;max-width:100%}
+  .site-header{padding:0 16px;gap:12px}
+  .sec-title{font-size:21px;margin:32px 0 12px}
+  .subject-hero h2{font-size:26px}
+  .bottom-nav{display:flex}
+  /* Sidebar becomes overlay on tablet too */
+  .sidebar-toc.active{
+    display:block;position:fixed;top:56px;left:0;z-index:150;
+    width:280px;height:calc(100vh - 56px);box-shadow:2px 0 16px rgba(0,0,0,.12);
+  }
+  .menu-btn{display:flex}
 }
+
+/* Phone: ≤500px */
 @media (max-width:500px){
-  .site-logo{font-size:15px}
+  :root{--header-h:48px}
+  .site-header{height:48px;padding:0 10px;gap:8px}
+  .site-logo{font-size:14px}
   .site-logo span{display:none}
-  .main-content{padding:16px 14px 80px}
-  .sec-title{font-size:19px}
-  .subject-hero h2{font-size:24px}
-  .vocab-grid{grid-template-columns:1fr}
+  .nav-toc-toggle{font-size:13px;padding:5px 12px}
+  .theme-toggle{width:32px;height:32px}
+  .theme-toggle svg{width:16px;height:16px}
+
+  .main-content{padding:14px 14px 110px}
+
+  /* Hero */
+  .subject-hero{padding:8px 0 14px;margin-bottom:18px}
+  .subject-hero-icon{font-size:28px;margin-bottom:4px}
+  .subject-hero h2{font-size:22px}
+  .subject-hero-desc{font-size:13px}
+
+  /* Typography */
+  .sec-title{font-size:18px;margin:24px 0 10px;padding-left:8px;line-height:1.35}
+  .sub-title{font-size:15px;margin:14px 0 6px}
+  .block-hdr{font-size:11px;margin:12px 0 4px;letter-spacing:.02em}
+  .cp,.cp-core,.cp-exp,.cp-rule,.cp-trap{font-size:13.5px;line-height:1.65;margin:4px 0}
+  .ex-sent{font-size:13px;padding:6px 10px;margin:4px 0}
+
+  /* Vocab: single column */
+  .vocab-grid{grid-template-columns:1fr;gap:2px 0;margin:6px 0 14px}
+  .vocab-item{padding:5px 8px;font-size:13px;border-radius:3px}
+  .vocab-word{min-width:55px;font-size:13px}
+  .vocab-def{font-size:12px}
+
+  /* Shengyi table: scrollable */
+  .sy-table{font-size:12px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;-webkit-transform:translateZ(0)}
+  .sy-table th,.sy-table td{padding:5px 7px;white-space:nowrap}
+  .sy-table th{font-size:11px}
+
+  /* Back to top */
+  .back-top{bottom:80px;right:12px;width:36px;height:36px;font-size:16px}
+
+  /* Bottom nav */
+  .bottom-nav{padding:5px 2px}
+  .bottom-nav-btn{font-size:9px;padding:3px 4px;min-width:42px;min-height:40px;gap:1px}
+  .bottom-nav-btn .bn-icon{font-size:16px}
+
+  /* Sidebar overlay */
+  .sidebar-toc.active{width:85vw;max-width:300px}
 }
+
+/* Extra small: ≤380px */
+@media (max-width:380px){
+  .main-content{padding:11px 10px 105px}
+  .sec-title{font-size:17px;margin:20px 0 8px}
+  .subject-hero h2{font-size:20px}
+  .subject-hero-icon{font-size:24px}
+  .bottom-nav-btn{font-size:8px;min-width:38px;padding:2px 3px}
+  .bottom-nav-btn .bn-icon{font-size:15px}
+}
+
+/* Touch-friendly: interactive targets ≥ 44px */
+@media (pointer:coarse){
+  .toc-subject summary{padding:8px 18px;min-height:44px;display:flex;align-items:center}
+  .toc-section a{padding:7px 12px;min-height:44px;display:flex;align-items:center}
+  .vocab-item{padding:7px 10px}
+  .bottom-nav-btn{min-height:44px}
+  .nav-toc-toggle{min-height:44px;display:flex;align-items:center}
+  .theme-toggle{min-height:44px;min-width:44px}
+}
+
+/* Accessibility: reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important
+  }
+}
+
+/* Bottom nav: hidden on desktop, shown on tablet/phone */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:120;background:var(--bg);border-top:1px solid var(--border);padding:6px 4px;padding-bottom:max(6px,env(safe-area-inset-bottom));justify-content:space-around;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.bottom-nav::-webkit-scrollbar{display:none}
+.bottom-nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;border-radius:8px;font-size:10px;color:var(--text-muted);min-width:48px;min-height:44px;justify-content:center;transition:all .15s;cursor:pointer;border:none;background:none;font-family:inherit;flex-shrink:0}
+.bottom-nav-btn:active{background:var(--bg-hover)}
+.bottom-nav-btn .bn-icon{font-size:18px;line-height:1}
+@media (max-width:860px){.bottom-nav{display:flex}}
+
+/* Menu button */
+.menu-btn{display:none;width:36px;height:36px;align-items:center;justify-content:center;border-radius:50%;border:none;background:none;cursor:pointer;color:var(--text-muted);font-size:18px}
+.menu-btn:hover{background:var(--bg-hover);color:var(--text)}
+@media (max-width:860px){.menu-btn{display:flex}}
 </style>
 </head>
 <body>
@@ -324,12 +417,42 @@ function setupBackTop(){
 // ===== INIT =====
 async function init(){
   setupTheme();
+  setupBottomNav();
   await loadAllData();
   renderAll();
   buildTOC();
   setupBackTop();
 }
 document.addEventListener('DOMContentLoaded', init);
+
+// ===== BOTTOM NAV =====
+function setupBottomNav(){
+  var nav = document.createElement('nav');
+  nav.className = 'bottom-nav';
+  nav.id = 'bottomNav';
+  var subjects = [
+    ['chemistry','⚗️','化学'],
+    ['math','📐','数学'],
+    ['physics','⚡','物理'],
+    ['biology','🧬','生物'],
+    ['english','📖','英语'],
+    ['chinese','📝','语文']
+  ];
+  nav.innerHTML = subjects.map(function(s){
+    return '<button class="bottom-nav-btn" data-subj="' + s[0] + '"><span class="bn-icon">' + s[1] + '</span>' + s[2] + '</button>';
+  }).join('');
+  document.body.appendChild(nav);
+
+  // Click to scroll
+  nav.querySelectorAll('.bottom-nav-btn').forEach(function(btn){
+    btn.onclick = function(){
+      var subj = btn.getAttribute('data-subj');
+      var el = document.getElementById('hero-' + subj);
+      if(el) el.scrollIntoView({behavior:'smooth'});
+      window.scrollBy(0, -70);
+    };
+  });
+}
 </script>
 </body>
 </html>
