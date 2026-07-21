@@ -362,31 +362,57 @@ async function loadAllData(){
 // ===== BUILD TOC =====
 function buildTOC(){
   var nav = document.getElementById('tocNav');
-  var html = '';
+  // Add search input for TOC
+  var html = '<div style="padding:0 16px 12px"><input type="text" id="tocFilter" placeholder="搜索科目或板块..." style="width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--text);outline:none" oninput="filterTOC()"></div>';
   for(var subj in SUBJECTS_DATA){
     var s = SUBJECTS_DATA[subj];
-    html += '<div class="toc-subject"><details><summary>' + s.icon + ' ' + s.name + '</summary><div class="toc-section">';
-    html += '<a href="#hero-' + subj + '" class="toc-overview">' + s.icon + ' 概览</a>';
-    // Parse content for section titles (h2 = 板块) and subsection titles (h3 = 小节)
     var content = (ALL_DATA[subj] && ALL_DATA[subj].content) || '';
+    // Build an ID for each entry
+    html += '<div class="toc-subject" data-toc-subj="' + subj + '" data-toc-name="' + s.name + '">';
+    html += '<details><summary>' + s.icon + ' <span class="toc-subj-name">' + s.name + '</span></summary><div class="toc-section">';
+    html += '<a href="#hero-' + subj + '" class="toc-overview" data-toc-text="' + s.name + ' 概览">' + s.icon + ' 概览</a>';
     // Find all h2 sections and their h3 subsections
     var secRe = /<h2 class="sec-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h2>([\s\S]*?)(?=<h2 class="sec-title"|$)/g;
     var secMatch;
     while((secMatch = secRe.exec(content)) !== null){
       var secTitle = secMatch[2].replace(/<[^>]+>/g,'').substring(0,50);
       var secBody = secMatch[3];
-      html += '<a href="#' + secMatch[1] + '" class="toc-section-link">' + secTitle + '</a>';
+      html += '<a href="#' + secMatch[1] + '" class="toc-section-link" data-toc-text="' + secTitle + '">' + secTitle + '</a>';
       // Find sub-sections within this section
       var subRe = /<h3 class="sub-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h3>/g;
       var subMatch;
       while((subMatch = subRe.exec(secBody)) !== null){
         var subTitle = subMatch[2].replace(/<[^>]+>/g,'').substring(0,40);
-        html += '<a href="#' + subMatch[1] + '" class="toc-sub-link">' + subTitle + '</a>';
+        html += '<a href="#' + subMatch[1] + '" class="toc-sub-link" data-toc-text="' + subTitle + '">' + subTitle + '</a>';
       }
     }
     html += '</div></details></div>';
   }
   nav.innerHTML = html;
+}
+
+function filterTOC(){
+  var q = document.getElementById('tocFilter').value.trim().toLowerCase();
+  var subjects = document.querySelectorAll('.toc-subject');
+  subjects.forEach(function(s){
+    if(!q){ s.style.display = ''; return; }
+    var name = (s.getAttribute('data-toc-name') || '').toLowerCase();
+    var links = s.querySelectorAll('[data-toc-text]');
+    var hasMatch = name.indexOf(q) !== -1;
+    links.forEach(function(a){
+      var txt = (a.getAttribute('data-toc-text') || '').toLowerCase();
+      if(txt.indexOf(q) !== -1){
+        a.style.display = '';
+        hasMatch = true;
+      } else {
+        a.style.display = 'none';
+      }
+    });
+    s.style.display = hasMatch ? '' : 'none';
+    if(hasMatch && q){
+      s.querySelector('details').setAttribute('open','');
+    }
+  });
 }
 
 // ===== RENDER ALL CONTENT =====
