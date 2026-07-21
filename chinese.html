@@ -67,6 +67,17 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
   transition:all .2s;color:var(--text-muted);
 }
 .nav-toc-toggle:hover{background:var(--bg-hover);color:var(--text)}
+.home-btn{
+  display:flex;align-items:center;gap:4px;padding:6px 14px;border-radius:20px;
+  font-size:14px;font-weight:500;color:var(--text-muted);transition:all .2s;
+  text-decoration:none;cursor:pointer;border:none;background:none;font-family:inherit;
+}
+.home-btn:hover{background:var(--bg-hover);color:var(--text)}
+.home-btn .hb-icon{font-size:16px}
+@media (max-width:500px){
+  .home-btn{padding:5px 10px;font-size:13px}
+  .home-btn .hb-icon{font-size:14px}
+}
 
 /* Layout */
 .app-layout{display:flex;min-height:calc(100vh - 56px)}
@@ -305,6 +316,7 @@ sup{top:-0.5em}
 <header class="site-header">
   <a class="site-logo" href="#top">📚 <span>高中知识点集合</span></a>
   <div class="header-right">
+    <a href="index.html" class="home-btn" title="返回选科首页"><span class="hb-icon">🏠</span> 选科</a>
     <button class="nav-toc-toggle" id="tocToggle" aria-label="目录">📑 目录</button>
     <button class="search-toggle" id="searchToggle" aria-label="搜索" title="搜索 (Ctrl+K)">🔍</button>
     <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
