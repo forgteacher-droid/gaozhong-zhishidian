@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>高中知识点集合 — 六科完整资料</title>
+<meta name="description" content="高中语文·数学·英语·物理·化学·生物六科知识点完整资料，涵盖高考核心考点、公式、方程式、实验、解题技巧。">
+<style>
+:root {
+  --bg: #fafaf8;
+  --bg-alt: #f3f1ec;
+  --bg-hover: #ebe8e2;
+  --text: #1a1a1c;
+  --text-muted: #6b6b6e;
+  --text-light: #949498;
+  --border: #e2ded6;
+  --border-light: #ece8e2;
+  --chem: #2D7B8C;
+  --math: #4E5283;
+  --physics: #B87D3C;
+  --biology: #3D7A4A;
+  --english: #C44D6A;
+  --chinese: #C4523B;
+}
+html.dark {
+  --bg: #1a1b1e;
+  --bg-alt: #222327;
+  --bg-hover: #2a2b2f;
+  --text: #e8e6e0;
+  --text-muted: #a0a0a4;
+  --text-light: #6e6e72;
+  --border: #3a3b3f;
+  --border-light: #2e2f33;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.75;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* Header */
+.site-header{
+  position:sticky;top:0;z-index:100;background:var(--bg);
+  border-bottom:1px solid var(--border);height:56px;
+  display:flex;align-items:center;padding:0 24px;gap:16px;
+  backdrop-filter:blur(8px);
+}
+.site-logo{
+  font-family:"Noto Serif SC","STSong","Songti SC",Georgia,serif;
+  font-size:18px;font-weight:700;white-space:nowrap;
+}
+.site-logo span{color:var(--chem)}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.theme-toggle{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;transition:background .2s;
+}
+.theme-toggle:hover{background:var(--bg-hover)}
+.theme-toggle svg{width:18px;height:18px;opacity:.7}
+.nav-toc-toggle{
+  padding:6px 14px;border-radius:20px;font-size:14px;font-weight:500;
+  transition:all .2s;color:var(--text-muted);
+}
+.nav-toc-toggle:hover{background:var(--bg-hover);color:var(--text)}
+
+/* Layout */
+.app-layout{display:flex;min-height:calc(100vh - 56px)}
+
+/* Sidebar TOC */
+.sidebar-toc{
+  width:260px;min-width:260px;border-right:1px solid var(--border);
+  background:var(--bg);overflow-y:auto;
+  position:sticky;top:56px;height:calc(100vh - 56px);
+  padding:16px 0 40px;
+}
+.toc-header{padding:0 20px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--text-light);text-transform:uppercase}
+.toc-subject{margin-bottom:4px}
+.toc-subject summary{
+  display:flex;align-items:center;padding:6px 20px 6px 16px;cursor:pointer;
+  border-radius:0 6px 6px 0;font-size:14px;margin-right:12px;
+  transition:background .15s;color:var(--text-muted);font-weight:600;
+}
+.toc-subject summary:hover{background:var(--bg-hover)}
+.toc-subject summary::-webkit-details-marker{display:none}
+.toc-subject summary::before{
+  content:'›';display:inline-block;width:16px;font-size:16px;font-weight:600;
+  transition:transform .2s;color:var(--text-light);
+}
+.toc-subject details[open] > summary::before{transform:rotate(90deg)}
+.toc-subject details[open] > summary{color:var(--text)}
+.toc-section{padding:2px 0 2px 28px}
+.toc-section a{
+  display:block;padding:3px 12px;font-size:13px;color:var(--text-muted);
+  border-radius:4px;transition:all .15s;
+}
+.toc-section a:hover{color:var(--text);background:var(--bg-hover)}
+
+/* Main */
+.main-content{flex:1;max-width:900px;padding:40px 48px 120px;overflow-x:hidden}
+
+/* Hero */
+.subject-hero{padding:12px 0 24px;border-bottom:1px solid var(--border-light);margin-bottom:28px}
+.subject-hero-icon{font-size:40px;margin-bottom:6px}
+.subject-hero h2{font-family:"Noto Serif SC","STSong","Songti SC",Georgia,serif;font-size:28px;font-weight:800}
+.subject-hero-desc{font-size:14px;color:var(--text-muted);margin-top:4px}
+
+/* Content */
+.sec-title{
+  font-family:"Noto Serif SC","STSong","Songti SC",Georgia,serif;
+  font-size:22px;font-weight:700;margin:36px 0 14px;padding-left:12px;
+  border-left:3px solid var(--chem);line-height:1.4;
+}
+.sub-title{font-size:17px;font-weight:600;margin:22px 0 8px;color:var(--text)}
+.block-hdr{
+  font-size:13px;font-weight:700;letter-spacing:.04em;margin:18px 0 6px;
+  padding:4px 0;border-bottom:1px solid var(--border-light);
+  display:flex;align-items:center;gap:8px;
+}
+.block-hdr::before{content:'';width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.bh-core{color:#3A7D8C}.bh-core::before{background:#3A7D8C}
+.bh-exp{color:#4A7C59}.bh-exp::before{background:#4A7C59}
+.bh-rule{color:#B8863C}.bh-rule::before{background:#B8863C}
+.bh-trap{color:#C4513B}.bh-trap::before{background:#C4513B}
+.bh-info{color:#6B6B6E}.bh-info::before{background:#6B6B6E}
+.cp{font-size:14.5px;margin:5px 0;padding-left:2px}
+.cp-core{border-left:2px solid #3A7D8C;padding-left:10px;border-radius:0 4px 4px 0}
+.cp-exp{border-left:2px solid #4A7C59;padding-left:10px;border-radius:0 4px 4px 0}
+.cp-rule{border-left:2px solid #B8863C;padding-left:10px;border-radius:0 4px 4px 0}
+.cp-trap{border-left:2px solid #C4513B;padding-left:10px;border-radius:0 4px 4px 0}
+.ex-sent{padding:8px 12px;margin:5px 0;background:var(--bg-alt);border-radius:6px;font-size:14px;border-left:3px solid #C44D6A}
+.ex-dia{color:#C44D6A;font-size:12px;margin-right:4px}
+
+/* Vocabulary */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:4px 14px;margin:10px 0 20px}
+.vocab-item{display:flex;align-items:baseline;gap:8px;padding:4px 8px;border-radius:4px;font-size:14px;transition:background .15s}
+.vocab-item:hover{background:var(--bg-hover)}
+.vocab-word{font-weight:700;color:#C44D6A;white-space:nowrap;min-width:70px}
+.vocab-def{color:var(--text-muted);font-size:13px}
+.sy-table{width:100%;border-collapse:collapse;margin:10px 0 20px;font-size:14px}
+.sy-table th{text-align:left;padding:7px 10px;border-bottom:2px solid var(--border);font-size:13px;font-weight:700;color:var(--text-muted)}
+.sy-table td{padding:6px 10px;border-bottom:1px solid var(--border-light)}
+.sy-table tr:hover td{background:var(--bg-hover)}
+.sy-word{font-weight:700;color:#C44D6A}
+.sy-exam{color:#C4513B}
+
+/* Back to top */
+.back-top{
+  position:fixed;bottom:24px;right:24px;z-index:90;
+  width:40px;height:40px;border-radius:50%;background:var(--bg);
+  border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.back-top.show{opacity:1;pointer-events:auto}
+.back-top:hover{background:var(--bg-hover)}
+
+@media (max-width:860px){
+  .sidebar-toc{display:none}
+  .main-content{padding:24px 20px 80px;max-width:100%}
+  .site-header{padding:0 12px;gap:10px}
+}
+@media (max-width:500px){
+  .site-logo{font-size:15px}
+  .site-logo span{display:none}
+  .main-content{padding:16px 14px 80px}
+  .sec-title{font-size:19px}
+  .subject-hero h2{font-size:24px}
+  .vocab-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-logo" href="#top">📚 <span>高中知识点集合</span></a>
+  <div class="header-right">
+    <button class="nav-toc-toggle" onclick="document.getElementById('tocSidebar').scrollIntoView({behavior:'smooth'})">📑 目录</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+      <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="moonIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar-toc" id="tocSidebar">
+    <div class="toc-header">六科目录</div>
+    <nav id="tocNav"></nav>
+  </aside>
+  <main class="main-content" id="mainContent"></main>
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">⬆</button>
+
+<script>
+// ===== DATA =====
+const SUBJECTS_DATA = {
+  chemistry: {name:"化学",icon:"⚗️",color:"#2D7B8C",desc:"元素化合物 · 反应原理 · 化学实验 · 物质结构 · 有机化学"},
+  math: {name:"数学",icon:"📐",color:"#4E5283",desc:"导数 · 解析几何 · 三角函数 · 立体几何 · 统计概率"},
+  physics: {name:"物理",icon:"⚡",color:"#B87D3C",desc:"运动学力学 · 电学 · 磁学 · 热学光学 · 原子物理"},
+  biology: {name:"生物",icon:"🧬",color:"#3D7A4A",desc:"遗传与进化 · 生物技术与工程 · 分子与细胞"},
+  english: {name:"英语",icon:"📖",color:"#C44D6A",desc:"高频词汇 · 语法专题 · 应用文写作 · 读后续写"},
+  chinese: {name:"语文",icon:"📝",color:"#C4523B",desc:"文言文 · 现代文阅读 · 作文 · 古诗鉴赏",placeholder:true}
+};
+
+let ALL_DATA = {};
+
+// ===== LOAD ALL DATA FILES =====
+async function loadAllData(){
+  const subjects = ['chemistry','math','physics','biology','english','chinese'];
+  const promises = subjects.map(async function(subj){
+    try {
+      const resp = await fetch('data_' + subj + '.json');
+      if(!resp.ok) throw new Error('HTTP ' + resp.status);
+      const json = await resp.json();
+      return [subj, json];
+    } catch(e){
+      console.warn('Failed to load', subj, e);
+      return [subj, {content:'<p>加载失败</p>',nav:''}];
+    }
+  });
+  const results = await Promise.all(promises);
+  results.forEach(function(r){ ALL_DATA[r[0]] = r[1]; });
+}
+
+// ===== BUILD TOC =====
+function buildTOC(){
+  var nav = document.getElementById('tocNav');
+  var html = '';
+  for(var subj in SUBJECTS_DATA){
+    var s = SUBJECTS_DATA[subj];
+    html += '<div class="toc-subject"><details open><summary>' + s.icon + ' ' + s.name + '</summary><div class="toc-section">';
+    html += '<a href="#hero-' + subj + '">' + s.icon + ' 概览</a>';
+    // Parse content for section titles
+    var content = (ALL_DATA[subj] && ALL_DATA[subj].content) || '';
+    var secRe = /<h2 class="sec-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h2>/g;
+    var match;
+    while((match = secRe.exec(content)) !== null){
+      var title = match[2].replace(/<[^>]+>/g,'').substring(0,60);
+      html += '<a href="#' + match[1] + '">' + title + '</a>';
+    }
+    html += '</div></details></div>';
+  }
+  nav.innerHTML = html;
+}
+
+// ===== RENDER ALL CONTENT =====
+function renderAll(){
+  var main = document.getElementById('mainContent');
+  var html = '';
+
+  for(var subj in SUBJECTS_DATA){
+    var s = SUBJECTS_DATA[subj];
+    var content = (ALL_DATA[subj] && ALL_DATA[subj].content) || '';
+    if(!content && s.placeholder){
+      content = '<div style="text-align:center;padding:80px 20px"><div style="font-size:48px;margin-bottom:12px">📝</div><h3>语文知识点</h3><p style="color:var(--text-muted)">正在整理中，敬请期待。</p></div>';
+    }
+
+    html += '<div class="subject-hero" id="hero-' + subj + '" style="border-left-color:' + s.color + '">';
+    html += '<div class="subject-hero-icon">' + s.icon + '</div>';
+    html += '<h2 style="color:' + s.color + '">' + s.name + '</h2>';
+    html += '<p class="subject-hero-desc">' + s.desc + '</p>';
+    if(s.placeholder) html += '<p style="margin-top:8px;color:var(--text-light);font-size:13px">该科目内容正在整理中</p>';
+    html += '</div>';
+
+    // Process content: replace existing CSS classes with the new ones
+    content = content
+      .replace(/class="section-title"/g, 'class="sec-title"')
+      .replace(/class="subsection-title"/g, 'class="sub-title"')
+      .replace(/class="block-header /g, 'class="block-hdr bh-')
+      .replace(/block-core"/g, 'core"')
+      .replace(/block-experiment"/g, 'exp"')
+      .replace(/block-rule"/g, 'rule"')
+      .replace(/block-trap"/g, 'trap"')
+      .replace(/block-info"/g, 'info"')
+      .replace(/class="content-block cb-/g, 'class="cp cp-')
+      .replace(/class="example-sentence"/g, 'class="ex-sent"')
+      .replace(/class="ex-diamond"/g, 'class="ex-dia"')
+      .replace(/class="vocab-grid"/g, 'class="vocab-grid"')
+      .replace(/class="vocab-item"/g, 'class="vocab-item"')
+      .replace(/class="vocab-word"/g, 'class="vocab-word"')
+      .replace(/class="vocab-def"/g, 'class="vocab-def"')
+      .replace(/class="shengyi-table"/g, 'class="sy-table"')
+      .replace(/class="sy-word"/g, 'class="sy-word"')
+      .replace(/class="sy-exam"/g, 'class="sy-exam"');
+
+    html += content;
+  }
+
+  main.innerHTML = html;
+}
+
+// ===== THEME =====
+function setupTheme(){
+  var toggle = document.getElementById('themeToggle');
+  var sun = document.getElementById('sunIcon');
+  var moon = document.getElementById('moonIcon');
+
+  function setTheme(dark){
+    document.documentElement.classList.toggle('dark', dark);
+    sun.style.display = dark ? 'none' : '';
+    moon.style.display = dark ? '' : 'none';
+    try{localStorage.setItem('kg-theme', dark ? 'dark' : 'light');}catch(e){}
+  }
+
+  var saved = localStorage.getItem('kg-theme');
+  if(saved){ setTheme(saved === 'dark'); }
+  else { setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches); }
+
+  toggle.onclick = function(){ setTheme(!document.documentElement.classList.contains('dark')); };
+}
+
+// ===== BACK TO TOP =====
+function setupBackTop(){
+  var btn = document.getElementById('backTop');
+  window.addEventListener('scroll', function(){
+    btn.classList.toggle('show', window.scrollY > 400);
+  });
+}
+
+// ===== INIT =====
+async function init(){
+  setupTheme();
+  await loadAllData();
+  renderAll();
+  buildTOC();
+  setupBackTop();
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
