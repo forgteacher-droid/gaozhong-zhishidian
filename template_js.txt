@@ -1,0 +1,333 @@
+// ===== DATA =====
+const SUBJECTS_DATA = {
+  chinese: {name:"语文",icon:"📝",color:"#C4523B",desc:"必背篇目 · 实词虚词 · 成语 · 阅读答题 · 作文"},
+  math: {name:"数学",icon:"📐",color:"#4E5283",desc:"导数 · 解析几何 · 三角函数 · 立体几何 · 统计概率"},
+  english: {name:"英语",icon:"📖",color:"#C44D6A",desc:"高频词汇 · 语法专题 · 应用文写作 · 读后续写"},
+  physics: {name:"物理",icon:"⚡",color:"#B87D3C",desc:"运动学力学 · 电学 · 磁学 · 热学光学 · 原子物理"},
+  chemistry: {name:"化学",icon:"⚗️",color:"#2D7B8C",desc:"元素化合物 · 反应原理 · 化学实验 · 物质结构 · 有机化学"},
+  biology: {name:"生物",icon:"🧬",color:"#3D7A4A",desc:"遗传与进化 · 生物技术与工程 · 分子与细胞"}
+};
+
+let ALL_DATA = {};
+
+// ===== LOAD ALL DATA FILES =====
+async function loadAllData(){
+  const subjects = ['chinese','math','english','physics','chemistry','biology'];
+  const promises = subjects.map(async function(subj){
+    try {
+      const resp = await fetch('data_' + subj + '.json');
+      if(!resp.ok) throw new Error('HTTP ' + resp.status);
+      const json = await resp.json();
+      return [subj, json];
+    } catch(e){
+      console.warn('Failed to load', subj, e);
+      return [subj, {content:'<p>加载失败</p>',nav:''}];
+    }
+  });
+  const results = await Promise.all(promises);
+  results.forEach(function(r){ ALL_DATA[r[0]] = r[1]; });
+}
+
+// ===== BUILD TOC =====
+function buildTOC(){
+  var nav = document.getElementById('tocNav');
+  // Add search input for TOC
+  var html = '<div style="padding:0 16px 12px"><input type="text" id="tocFilter" placeholder="搜索科目或板块..." style="width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--text);outline:none" oninput="filterTOC()"></div>';
+  for(var subj in SUBJECTS_DATA){
+    var s = SUBJECTS_DATA[subj];
+    var content = (ALL_DATA[subj] && ALL_DATA[subj].content) || '';
+    // Build an ID for each entry
+    html += '<div class="toc-subject" data-toc-subj="' + subj + '" data-toc-name="' + s.name + '">';
+    html += '<details><summary>' + s.icon + ' <span class="toc-subj-name">' + s.name + '</span></summary><div class="toc-section">';
+    html += '<a href="#hero-' + subj + '" class="toc-overview" data-toc-text="' + s.name + ' 概览">' + s.icon + ' 概览</a>';
+    // Find all h2 sections and their h3 subsections (data uses original class names 'section-title' and 'subsection-title')
+    var secRe = /<h2 class="section-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h2>([\s\S]*?)(?=<h2 class="section-title"|$)/g;
+    var secMatch;
+    while((secMatch = secRe.exec(content)) !== null){
+      var secTitle = secMatch[2].replace(/<[^>]+>/g,'').substring(0,50);
+      var secBody = secMatch[3];
+      html += '<a href="#' + secMatch[1] + '" class="toc-section-link" data-toc-text="' + secTitle + '">' + secTitle + '</a>';
+      // Find sub-sections within this section
+      var subRe = /<h3 class="subsection-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h3>/g;
+      var subMatch;
+      while((subMatch = subRe.exec(secBody)) !== null){
+        var subTitle = subMatch[2].replace(/<[^>]+>/g,'').substring(0,40);
+        html += '<a href="#' + subMatch[1] + '" class="toc-sub-link" data-toc-text="' + subTitle + '">' + subTitle + '</a>';
+      }
+    }
+    html += '</div></details></div>';
+  }
+  nav.innerHTML = html;
+}
+
+function filterTOC(){
+  var q = document.getElementById('tocFilter').value.trim().toLowerCase();
+  var subjects = document.querySelectorAll('.toc-subject');
+  subjects.forEach(function(s){
+    if(!q){ s.style.display = ''; return; }
+    var name = (s.getAttribute('data-toc-name') || '').toLowerCase();
+    var links = s.querySelectorAll('[data-toc-text]');
+    var hasMatch = name.indexOf(q) !== -1;
+    links.forEach(function(a){
+      var txt = (a.getAttribute('data-toc-text') || '').toLowerCase();
+      if(txt.indexOf(q) !== -1){
+        a.style.display = '';
+        hasMatch = true;
+      } else {
+        a.style.display = 'none';
+      }
+    });
+    s.style.display = hasMatch ? '' : 'none';
+    if(hasMatch && q){
+      s.querySelector('details').setAttribute('open','');
+    }
+  });
+}
+
+// ===== RENDER ALL CONTENT =====
+function renderAll(){
+  var main = document.getElementById('mainContent');
+  var html = '';
+
+  for(var subj in SUBJECTS_DATA){
+    var s = SUBJECTS_DATA[subj];
+    var content = (ALL_DATA[subj] && ALL_DATA[subj].content) || '';
+    if(!content && s.placeholder){
+      content = '<div style="text-align:center;padding:80px 20px"><div style="font-size:48px;margin-bottom:12px">📝</div><h3>语文知识点</h3><p style="color:var(--text-muted)">正在整理中，敬请期待。</p></div>';
+    }
+
+    html += '<div class="subject-hero" id="hero-' + subj + '" style="border-left-color:' + s.color + '">';
+    html += '<div class="subject-hero-icon">' + s.icon + '</div>';
+    html += '<h2 style="color:' + s.color + '">' + s.name + '</h2>';
+    html += '<p class="subject-hero-desc">' + s.desc + '</p>';
+    if(s.placeholder) html += '<p style="margin-top:8px;color:var(--text-light);font-size:13px">该科目内容正在整理中</p>';
+    html += '</div>';
+
+    // Process content: replace existing CSS classes with the new ones
+    content = content
+      .replace(/class="section-title"/g, 'class="sec-title"')
+      .replace(/class="subsection-title"/g, 'class="sub-title"')
+      .replace(/class="block-header /g, 'class="block-hdr bh-')
+      .replace(/block-core"/g, 'core"')
+      .replace(/block-experiment"/g, 'exp"')
+      .replace(/block-rule"/g, 'rule"')
+      .replace(/block-trap"/g, 'trap"')
+      .replace(/block-info"/g, 'info"')
+      .replace(/class="content-block cb-/g, 'class="cp cp-')
+      .replace(/class="example-sentence"/g, 'class="ex-sent"')
+      .replace(/class="ex-diamond"/g, 'class="ex-dia"')
+      .replace(/class="vocab-grid"/g, 'class="vocab-grid"')
+      .replace(/class="vocab-item"/g, 'class="vocab-item"')
+      .replace(/class="vocab-word"/g, 'class="vocab-word"')
+      .replace(/class="vocab-def"/g, 'class="vocab-def"')
+      .replace(/class="shengyi-table"/g, 'class="sy-table"')
+      .replace(/class="sy-word"/g, 'class="sy-word"')
+      .replace(/class="sy-exam"/g, 'class="sy-exam"');
+
+    html += content;
+  }
+
+  main.innerHTML = html;
+}
+
+// ===== THEME =====
+function setupTheme(){
+  var toggle = document.getElementById('themeToggle');
+  var sun = document.getElementById('sunIcon');
+  var moon = document.getElementById('moonIcon');
+
+  function setTheme(dark){
+    document.documentElement.classList.toggle('dark', dark);
+    sun.style.display = dark ? 'none' : '';
+    moon.style.display = dark ? '' : 'none';
+    try{localStorage.setItem('kg-theme', dark ? 'dark' : 'light');}catch(e){}
+  }
+
+  var saved = localStorage.getItem('kg-theme');
+  if(saved){ setTheme(saved === 'dark'); }
+  else { setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches); }
+
+  toggle.onclick = function(){ setTheme(!document.documentElement.classList.contains('dark')); };
+}
+
+// ===== BACK TO TOP =====
+function setupBackTop(){
+  var btn = document.getElementById('backTop');
+  window.addEventListener('scroll', function(){
+    btn.classList.toggle('show', window.scrollY > 400);
+  });
+}
+
+// ===== TOC TOGGLE =====
+function setupTocToggle(){
+  var toggle = document.getElementById('tocToggle');
+  var toc = document.getElementById('tocSidebar');
+  var backdrop = document.getElementById('tocBackdrop');
+
+  function openToc(){
+    toc.classList.add('open');
+    backdrop.classList.add('open');
+  }
+  function closeToc(){
+    toc.classList.remove('open');
+    backdrop.classList.remove('open');
+  }
+
+  toggle.onclick = function(){
+    if(toc.classList.contains('open')) closeToc();
+    else openToc();
+  };
+  backdrop.onclick = closeToc;
+
+  // Close TOC when clicking a link inside it (mobile)
+  toc.addEventListener('click', function(e){
+    if(e.target.tagName === 'A') closeToc();
+  });
+}
+
+// ===== INIT =====
+let searchIndex = [];
+
+async function init(){
+  // Check URL parameter for subject override
+  var params = new URLSearchParams(window.location.search);
+  var urlSubject = params.get('subject');
+
+  setupTheme();
+  await loadAllData();
+  renderAll();
+  buildTOC();
+  setupBottomNav();
+  setupSearch();
+  setupBackTop();
+  setupTocToggle();
+
+  // If URL has subject parameter, scroll to that subject
+  if(urlSubject && SUBJECTS_DATA[urlSubject]){
+    setTimeout(function(){
+      var el = document.getElementById('hero-' + urlSubject);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    }, 300);
+  }
+}
+document.addEventListener('DOMContentLoaded', init);
+
+// ===== BOTTOM NAV =====
+function setupBottomNav(){
+  var nav = document.createElement('nav');
+  nav.className = 'bottom-nav';
+  nav.id = 'bottomNav';
+  var subjects = [
+    ['chinese','📝','语文'],
+    ['math','📐','数学'],
+    ['english','📖','英语'],
+    ['physics','⚡','物理'],
+    ['chemistry','⚗️','化学'],
+    ['biology','🧬','生物']
+  ];
+  nav.innerHTML = subjects.map(function(s){
+    return '<button class="bottom-nav-btn" data-subj="' + s[0] + '"><span class="bn-icon">' + s[1] + '</span>' + s[2] + '</button>';
+  }).join('');
+  document.body.appendChild(nav);
+
+  // Click to scroll
+  nav.querySelectorAll('.bottom-nav-btn').forEach(function(btn){
+    btn.onclick = function(e){
+      e.preventDefault();
+      var subj = btn.getAttribute('data-subj');
+      var el = document.getElementById('hero-' + subj);
+      if(el) {
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    };
+  });
+}
+
+// ===== SEARCH =====
+function buildSearchIndex(){
+  searchIndex = [];
+  var main = document.getElementById('mainContent');
+  main.querySelectorAll('.sec-title').forEach(function(el){
+    searchIndex.push({type:'section',text:el.textContent.trim(),id:el.id,subject:el.closest('[id^=hero-]')?.id?.replace('hero-','')});
+  });
+  main.querySelectorAll('.sub-title').forEach(function(el){
+    searchIndex.push({type:'subsection',text:el.textContent.trim(),id:el.id,subject:el.closest('[id^=hero-]')?.id?.replace('hero-','')});
+  });
+  main.querySelectorAll('.cp, .cp-core, .cp-exp, .cp-rule, .cp-trap, .ex-sent').forEach(function(el){
+    var t = el.textContent.trim();
+    if(t.length > 10){
+      var hero = el.closest('[id^=hero-]');
+      searchIndex.push({type:'content',text:t.substring(0,120),fullText:t,subject:hero?.id?.replace('hero-',''),id:el.closest('.sec-title, .sub-title')?.id});
+    }
+  });
+}
+
+function setupSearch(){
+  var overlay = document.getElementById('searchOverlay');
+  var input = document.getElementById('searchInput');
+  var results = document.getElementById('searchResults');
+  var toggle = document.getElementById('searchToggle');
+
+  toggle.onclick = function(){
+    overlay.classList.add('open');
+    input.focus();
+    buildSearchIndex();
+  };
+
+  overlay.onclick = function(e){ if(e.target === overlay) closeSearch(); };
+
+  input.oninput = function(){
+    var q = input.value.trim().toLowerCase();
+    if(q.length < 1){ results.innerHTML = ''; return; }
+    var matches = searchIndex.filter(function(i){ return i.text.toLowerCase().indexOf(q) !== -1; }).slice(0, 30);
+    if(matches.length === 0){
+      results.innerHTML = '<div class="search-no-results">未找到相关结果</div>';
+    } else {
+      results.innerHTML = matches.map(function(m,i){
+        var subjName = SUBJECTS_DATA[m.subject]?.name || '';
+        return '<div class="search-result'+(i===0?' focus':'')+'" data-subject="'+m.subject+'" data-id="'+(m.id||'')+'"><div class="search-result-title">'+highlightMatch(m.text,q,60)+'</div><div class="search-result-subject">'+subjName+'</div></div>';
+      }).join('');
+      results.querySelectorAll('.search-result').forEach(function(el){
+        el.onclick = function(){
+          var subj = el.getAttribute('data-subject');
+          var id = el.getAttribute('data-id');
+          closeSearch();
+          if(id){ var t = document.getElementById(id); if(t) t.scrollIntoView({behavior:'smooth'}); }
+        };
+      });
+    }
+  };
+
+  input.onkeydown = function(e){
+    if(e.key === 'Escape') closeSearch();
+    if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      var items = results.querySelectorAll('.search-result');
+      if(!items.length) return;
+      var focused = results.querySelector('.search-result.focus');
+      var idx = focused ? Array.from(items).indexOf(focused) : -1;
+      var next = e.key === 'ArrowDown' ? Math.min(idx+1,items.length-1) : Math.max(idx-1,0);
+      if(focused) focused.classList.remove('focus');
+      items[next].classList.add('focus');
+      items[next].scrollIntoView({block:'nearest'});
+    }
+    if(e.key === 'Enter'){ var f = results.querySelector('.search-result.focus'); if(f) f.click(); }
+  };
+}
+
+function highlightMatch(text, query, maxLen){
+  var t = text.replace(/<[^>]+>/g, '');
+  if(t.length > maxLen){ var idx = t.toLowerCase().indexOf(query.toLowerCase()); var s = Math.max(0, idx-30); t = (s>0?'...':'') + t.substring(s, s+maxLen) + (s+maxLen<t.length?'...':''); }
+  var re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  return t.replace(re, '<mark style="background:rgba(45,123,140,.2);color:var(--chem);border-radius:2px;padding:0 2px">$1</mark>');
+}
+
+function closeSearch(){
+  document.getElementById('searchOverlay').classList.remove('open');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+}
+
+document.addEventListener('keydown', function(e){
+  if((e.ctrlKey || e.metaKey) && e.key === 'k'){ e.preventDefault(); document.getElementById('searchToggle').click(); }
+});

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>高中物理知识点</title>
+<meta name="description" content="高中物理知识点查询 — 运动学力学 · 电学 · 磁学 · 热学光学 · 原子物理">
+<style>
+
+:root {
+  --bg: #fafaf8;
+  --bg-alt: #f3f1ec;
+  --bg-hover: #ebe8e2;
+  --text: #1a1a1c;
+  --text-muted: #6b6b6e;
+  --text-light: #949498;
+  --border: #e2ded6;
+  --border-light: #ece8e2;
+  --chem: #2D7B8C;
+  --math: #4E5283;
+  --physics: #B87D3C;
+  --biology: #3D7A4A;
+  --english: #C44D6A;
+  --chinese: #C4523B;
+}
+html.dark {
+  --bg: #1a1b1e;
+  --bg-alt: #222327;
+  --bg-hover: #2a2b2f;
+  --text: #e8e6e0;
+  --text-muted: #a0a0a4;
+  --text-light: #6e6e72;
+  --border: #3a3b3f;
+  --border-light: #2e2f33;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.75;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* Header */
+.site-header{
+  position:sticky;top:0;z-index:100;background:var(--bg);
+  border-bottom:1px solid var(--border);height:56px;
+  display:flex;align-items:center;padding:0 24px;gap:16px;
+  backdrop-filter:blur(8px);
+}
+.site-logo{
+  font-family:"Noto Serif SC","STSong","Songti SC",Georgia,serif;
+  font-size:18px;font-weight:700;white-space:nowrap;
+}
+.site-logo span{color:var(--chem)}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.theme-toggle{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;transition:background .2s;
+}
+.theme-toggle:hover{background:var(--bg-hover)}
+.theme-toggle svg{width:18px;height:18px;opacity:.7}
+.nav-toc-toggle{
+  padding:6px 14px;border-radius:20px;font-size:14px;font-weight:500;
+  transition:all .2s;color:var(--text-muted);
+}
+.nav-toc-toggle:hover{background:var(--bg-hover);color:var(--text)}
+
+/* Layout */
+.app-layout{display:flex;min-height:calc(100vh - 56px)}
+
+/* Sidebar TOC */
+.sidebar-toc{
+  width:260px;min-width:260px;border-right:1px solid var(--border);
+  background:var(--bg);overflow-y:auto;
+  position:sticky;top:56px;height:calc(100vh - 56px);
+  padding:16px 0 40px;
+}
+.toc-header{padding:0 20px 12px;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--text-light);text-transform:uppercase}
+.toc-subject{margin-bottom:4px}
+.toc-subject summary{
+  display:flex;align-items:center;padding:6px 20px 6px 16px;cursor:pointer;
+  border-radius:0 6px 6px 0;font-size:14px;margin-right:12px;
+  transition:background .15s;color:var(--text-muted);font-weight:600;
+}
+.toc-subject summary:hover{background:var(--bg-hover)}
+.toc-subject summary::-webkit-details-marker{display:none}
+.toc-subject summary::before{
+  content:'›';display:inline-block;width:16px;font-size:16px;font-weight:600;
+  transition:transform .2s;color:var(--text-light);
+}
+.toc-subject details[open] > summary::before{transform:rotate(90deg)}
+.toc-subject details[open] > summary{color:var(--text)}
+.toc-section{padding:2px 0 2px 28px}
+.toc-section a{
+  display:block;padding:3px 12px;font-size:13px;color:var(--text-muted);
+  border-radius:4px;transition:all .15s;
+}
+.toc-section a:hover{color:var(--text);background:var(--bg-hover)}
+.toc-section a.toc-overview{font-weight:600;font-size:13px;color:var(--text)}
+.toc-section a.toc-section-link{font-weight:500;font-size:13px;padding-left:8px}
+.toc-section a.toc-sub-link{font-size:12px;padding-left:20px;color:var(--text-light)}
+
+/* Main */
+.main-content{flex:1;max-width:900px;padding:40px 48px 120px;overflow-x:hidden}
+
+/* Hero */
+.subject-hero{padding:12px 0 24px;border-bottom:1px solid var(--border-light);margin-bottom:28px}
+.subject-hero-icon{font-size:40px;margin-bottom:6px}
+.subject-hero h2{font-family:"Noto Serif SC","STSong","Songti SC",Georgia,serif;font-size:28px;font-weight:800}
+.subject-hero-desc{font-size:14px;color:var(--text-muted);margin-top:4px}
+
+/* Content */
+.sec-title{
+  font-family:"Noto Serif SC","STSong","Songti SC",Georgia,serif;
+  font-size:22px;font-weight:700;margin:36px 0 14px;padding-left:12px;
+  border-left:3px solid var(--chem);line-height:1.4;
+}
+.sub-title{font-size:17px;font-weight:600;margin:22px 0 8px;color:var(--text)}
+.block-hdr{
+  font-size:13px;font-weight:700;letter-spacing:.04em;margin:18px 0 6px;
+  padding:4px 0;border-bottom:1px solid var(--border-light);
+  display:flex;align-items:center;gap:8px;
+}
+.block-hdr::before{content:'';width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.bh-core{color:#3A7D8C}.bh-core::before{background:#3A7D8C}
+.bh-exp{color:#4A7C59}.bh-exp::before{background:#4A7C59}
+.bh-rule{color:#B8863C}.bh-rule::before{background:#B8863C}
+.bh-trap{color:#C4513B}.bh-trap::before{background:#C4513B}
+.bh-info{color:#6B6B6E}.bh-info::before{background:#6B6B6E}
+.cp{font-size:14.5px;margin:5px 0;padding-left:2px}
+.cp-core{border-left:2px solid #3A7D8C;padding-left:10px;border-radius:0 4px 4px 0}
+.cp-exp{border-left:2px solid #4A7C59;padding-left:10px;border-radius:0 4px 4px 0}
+.cp-rule{border-left:2px solid #B8863C;padding-left:10px;border-radius:0 4px 4px 0}
+.cp-trap{border-left:2px solid #C4513B;padding-left:10px;border-radius:0 4px 4px 0}
+.ex-sent{padding:8px 12px;margin:5px 0;background:var(--bg-alt);border-radius:6px;font-size:14px;border-left:3px solid #C44D6A}
+.ex-dia{color:#C44D6A;font-size:12px;margin-right:4px}
+
+/* Vocabulary */
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:4px 14px;margin:10px 0 20px}
+.vocab-item{display:flex;align-items:baseline;gap:8px;padding:4px 8px;border-radius:4px;font-size:14px;transition:background .15s}
+.vocab-item:hover{background:var(--bg-hover)}
+.vocab-word{font-weight:700;color:#C44D6A;white-space:nowrap;min-width:70px}
+.vocab-def{color:var(--text-muted);font-size:13px}
+.sy-table{width:100%;border-collapse:collapse;margin:10px 0 20px;font-size:14px}
+.sy-table th{text-align:left;padding:7px 10px;border-bottom:2px solid var(--border);font-size:13px;font-weight:700;color:var(--text-muted)}
+.sy-table td{padding:6px 10px;border-bottom:1px solid var(--border-light)}
+.sy-table tr:hover td{background:var(--bg-hover)}
+.sy-word{font-weight:700;color:#C44D6A}
+.sy-exam{color:#C4513B}
+
+/* Back to top */
+.back-top{
+  position:fixed;bottom:24px;right:24px;z-index:90;
+  width:40px;height:40px;border-radius:50%;background:var(--bg);
+  border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.back-top.show{opacity:1;pointer-events:auto}
+.back-top:hover{background:var(--bg-hover)}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet: ≤860px — sidebar hidden by default, toggleable */
+@media (max-width:860px){
+  .sidebar-toc{display:none;position:fixed;top:56px;left:0;z-index:150;width:280px;height:calc(100vh - 56px);overflow-y:auto;background:var(--bg);border-right:1px solid var(--border);box-shadow:2px 0 16px rgba(0,0,0,.12)}
+  .sidebar-toc.open{display:block}
+  .main-content{padding:20px 24px 100px;max-width:100%}
+  .site-header{padding:0 16px;gap:12px}
+  .sec-title{font-size:21px;margin:32px 0 12px}
+  .subject-hero h2{font-size:26px}
+  .bottom-nav{display:flex}
+}
+/* TOC backdrop */
+.toc-backdrop{display:none;position:fixed;inset:0;z-index:149;background:rgba(0,0,0,.2)}
+.toc-backdrop.open{display:block}
+@media (max-width:860px){.toc-backdrop.open{display:block}}
+  .menu-btn{display:flex}
+}
+
+/* Phone: ≤500px */
+@media (max-width:500px){
+  :root{--header-h:48px}
+  .site-header{height:48px;padding:0 10px;gap:8px}
+  .site-logo{font-size:14px}
+  .site-logo span{display:none}
+  .nav-toc-toggle{font-size:13px;padding:5px 12px}
+  .theme-toggle{width:32px;height:32px}
+  .theme-toggle svg{width:16px;height:16px}
+
+  .main-content{padding:14px 14px 110px}
+
+  /* Hero */
+  .subject-hero{padding:8px 0 14px;margin-bottom:18px}
+  .subject-hero-icon{font-size:28px;margin-bottom:4px}
+  .subject-hero h2{font-size:22px}
+  .subject-hero-desc{font-size:13px}
+
+  /* Typography */
+  .sec-title{font-size:18px;margin:24px 0 10px;padding-left:8px;line-height:1.35}
+  .sub-title{font-size:15px;margin:14px 0 6px}
+  .block-hdr{font-size:11px;margin:12px 0 4px;letter-spacing:.02em}
+  .cp,.cp-core,.cp-exp,.cp-rule,.cp-trap{font-size:13.5px;line-height:1.65;margin:4px 0}
+  .ex-sent{font-size:13px;padding:6px 10px;margin:4px 0}
+
+  /* Vocab: single column */
+  .vocab-grid{grid-template-columns:1fr;gap:2px 0;margin:6px 0 14px}
+  .vocab-item{padding:5px 8px;font-size:13px;border-radius:3px}
+  .vocab-word{min-width:55px;font-size:13px}
+  .vocab-def{font-size:12px}
+
+  /* Shengyi table: scrollable */
+  .sy-table{font-size:12px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;-webkit-transform:translateZ(0)}
+  .sy-table th,.sy-table td{padding:5px 7px;white-space:nowrap}
+  .sy-table th{font-size:11px}
+
+  /* Back to top */
+  .back-top{bottom:80px;right:12px;width:36px;height:36px;font-size:16px}
+
+  /* Bottom nav */
+  .bottom-nav{padding:5px 2px}
+  .bottom-nav-btn{font-size:9px;padding:3px 4px;min-width:42px;min-height:40px;gap:1px}
+  .bottom-nav-btn .bn-icon{font-size:16px}
+
+  /* Sidebar overlay */
+  .sidebar-toc.active{width:85vw;max-width:300px}
+}
+
+/* Extra small: ≤380px */
+@media (max-width:380px){
+  .main-content{padding:11px 10px 105px}
+  .sec-title{font-size:17px;margin:20px 0 8px}
+  .subject-hero h2{font-size:20px}
+  .subject-hero-icon{font-size:24px}
+  .bottom-nav-btn{font-size:8px;min-width:38px;padding:2px 3px}
+  .bottom-nav-btn .bn-icon{font-size:15px}
+}
+
+/* Touch-friendly: interactive targets ≥ 44px */
+@media (pointer:coarse){
+  .toc-subject summary{padding:8px 18px;min-height:44px;display:flex;align-items:center}
+  .toc-section a{padding:7px 12px;min-height:44px;display:flex;align-items:center}
+  .vocab-item{padding:7px 10px}
+  .bottom-nav-btn{min-height:44px}
+  .nav-toc-toggle{min-height:44px;display:flex;align-items:center}
+  .theme-toggle{min-height:44px;min-width:44px}
+}
+
+/* Accessibility: reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important
+  }
+}
+
+/* Bottom nav: hidden on desktop, shown on tablet/phone */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:120;background:var(--bg);border-top:1px solid var(--border);padding:6px 4px;padding-bottom:max(6px,env(safe-area-inset-bottom));justify-content:space-around;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.bottom-nav::-webkit-scrollbar{display:none}
+.bottom-nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;border-radius:8px;font-size:10px;color:var(--text-muted);min-width:48px;min-height:44px;justify-content:center;transition:all .15s;cursor:pointer;border:none;background:none;font-family:inherit;flex-shrink:0}
+.bottom-nav-btn:active{background:var(--bg-hover)}
+.bottom-nav-btn .bn-icon{font-size:18px;line-height:1}
+@media (max-width:860px){.bottom-nav{display:flex}}
+
+/* ===== SEARCH ===== */
+.search-toggle{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s;font-size:16px;cursor:pointer;border:none;background:none;color:inherit}
+.search-toggle:hover{background:var(--bg-hover)}
+.search-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.3);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;padding-top:120px}
+.search-overlay.open{display:flex}
+.search-modal{background:var(--bg);border:1px solid var(--border);border-radius:10px;width:560px;max-width:90vw;box-shadow:0 8px 40px rgba(0,0,0,.15);overflow:hidden}
+.search-input-wrap{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);gap:12px}
+.search-results{max-height:420px;overflow-y:auto;padding:8px}
+.search-result{padding:10px 16px;border-radius:6px;cursor:pointer;transition:background .15s}
+.search-result:hover,.search-result.focus{background:var(--bg-hover)}
+.search-result-title{font-size:14px;font-weight:600}
+.search-result-context{font-size:12px;color:var(--text-muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.search-result-subject{font-size:11px;color:var(--text-light)}
+.search-no-results{padding:24px;text-align:center;color:var(--text-muted);font-size:14px}
+
+/* Formula sub/superscript rendering */
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sub{bottom:-0.25em}
+sup{top:-0.5em}
+
+@media (max-width:500px){
+  .search-overlay{padding-top:0;align-items:stretch}
+  .search-modal{width:100%;max-width:100%;border-radius:0;border:none;height:100vh;display:flex;flex-direction:column}
+  .search-input-wrap{padding:12px 16px}
+  .search-results{max-height:none;flex:1}
+  .search-input-wrap kbd{display:none}
+}
+
+/* Menu button */
+.menu-btn{display:none;width:36px;height:36px;align-items:center;justify-content:center;border-radius:50%;border:none;background:none;cursor:pointer;color:var(--text-muted);font-size:18px}
+.menu-btn:hover{background:var(--bg-hover);color:var(--text)}
+@media (max-width:860px){.menu-btn{display:flex}}
+
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a class="site-logo" href="#top">📚 <span>高中知识点集合</span></a>
+  <div class="header-right">
+    <button class="nav-toc-toggle" id="tocToggle" aria-label="目录">📑 目录</button>
+    <button class="search-toggle" id="searchToggle" aria-label="搜索" title="搜索 (Ctrl+K)">🔍</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+      <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="moonIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar-toc" id="tocSidebar">
+    <div class="toc-header">六科目录</div>
+    <nav id="tocNav"></nav>
+  </aside>
+  <div class="toc-backdrop" id="tocBackdrop"></div>
+  <main class="main-content" id="mainContent"></main>
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">⬆</button>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-modal">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;opacity:.4;flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="搜索知识点..." autocomplete="off" style="flex:1;border:none;background:none;font:inherit;font-size:16px;color:var(--text);outline:none">
+      <kbd style="font-size:11px;padding:2px 8px;border-radius:4px;border:1px solid var(--border);color:var(--text-light)">ESC</kbd>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+
+<script>
+// ===== DATA =====
+const SUBJECTS_DATA = {
+  physics: {name:"物理",icon:"⚡",color:"#B87D3C",desc:"运动学力学 · 电学 · 磁学 · 热学光学 · 原子物理"}
+};
+
+let ALL_DATA = {};
+
+// ===== LOAD ALL DATA FILES =====
+async function loadAllData(){
+  const subjects = ['physics'];
+  const promises = subjects.map(async function(subj){
+    try {
+      const resp = await fetch('data_' + subj + '.json');
+      if(!resp.ok) throw new Error('HTTP ' + resp.status);
+      const json = await resp.json();
+      return [subj, json];
+    } catch(e){
+      console.warn('Failed to load', subj, e);
+      return [subj, {content:'<p>加载失败</p>',nav:''}];
+    }
+  });
+  const results = await Promise.all(promises);
+  results.forEach(function(r){ ALL_DATA[r[0]] = r[1]; });
+}
+
+// ===== BUILD TOC =====
+function buildTOC(){
+  var nav = document.getElementById('tocNav');
+  // Add search input for TOC
+  var html = '<div style="padding:0 16px 12px"><input type="text" id="tocFilter" placeholder="搜索科目或板块..." style="width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--text);outline:none" oninput="filterTOC()"></div>';
+  for(var subj in SUBJECTS_DATA){
+    var s = SUBJECTS_DATA[subj];
+    var content = (ALL_DATA[subj] && ALL_DATA[subj].content) || '';
+    // Build an ID for each entry
+    html += '<div class="toc-subject" data-toc-subj="' + subj + '" data-toc-name="' + s.name + '">';
+    html += '<details><summary>' + s.icon + ' <span class="toc-subj-name">' + s.name + '</span></summary><div class="toc-section">';
+    html += '<a href="#hero-' + subj + '" class="toc-overview" data-toc-text="' + s.name + ' 概览">' + s.icon + ' 概览</a>';
+    // Find all h2 sections and their h3 subsections (data uses original class names 'section-title' and 'subsection-title')
+    var secRe = /<h2 class="section-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h2>([\s\S]*?)(?=<h2 class="section-title"|$)/g;
+    var secMatch;
+    while((secMatch = secRe.exec(content)) !== null){
+      var secTitle = secMatch[2].replace(/<[^>]+>/g,'').substring(0,50);
+      var secBody = secMatch[3];
+      html += '<a href="#' + secMatch[1] + '" class="toc-section-link" data-toc-text="' + secTitle + '">' + secTitle + '</a>';
+      // Find sub-sections within this section
+      var subRe = /<h3 class="subsection-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h3>/g;
+      var subMatch;
+      while((subMatch = subRe.exec(secBody)) !== null){
+        var subTitle = subMatch[2].replace(/<[^>]+>/g,'').substring(0,40);
+        html += '<a href="#' + subMatch[1] + '" class="toc-sub-link" data-toc-text="' + subTitle + '">' + subTitle + '</a>';
+      }
+    }
+    html += '</div></details></div>';
+  }
+  nav.innerHTML = html;
+}
+
+function filterTOC(){
+  var q = document.getElementById('tocFilter').value.trim().toLowerCase();
+  var subjects = document.querySelectorAll('.toc-subject');
+  subjects.forEach(function(s){
+    if(!q){ s.style.display = ''; return; }
+    var name = (s.getAttribute('data-toc-name') || '').toLowerCase();
+    var links = s.querySelectorAll('[data-toc-text]');
+    var hasMatch = name.indexOf(q) !== -1;
+    links.forEach(function(a){
+      var txt = (a.getAttribute('data-toc-text') || '').toLowerCase();
+      if(txt.indexOf(q) !== -1){
+        a.style.display = '';
+        hasMatch = true;
+      } else {
+        a.style.display = 'none';
+      }
+    });
+    s.style.display = hasMatch ? '' : 'none';
+    if(hasMatch && q){
+      s.querySelector('details').setAttribute('open','');
+    }
+  });
+}
+
+// ===== RENDER ALL CONTENT =====
+function renderAll(){
+  var main = document.getElementById('mainContent');
+  var html = '';
+
+  for(var subj in SUBJECTS_DATA){
+    var s = SUBJECTS_DATA[subj];
+    var content = (ALL_DATA[subj] && ALL_DATA[subj].content) || '';
+    if(!content && s.placeholder){
+      content = '<div style="text-align:center;padding:80px 20px"><div style="font-size:48px;margin-bottom:12px">📝</div><h3>语文知识点</h3><p style="color:var(--text-muted)">正在整理中，敬请期待。</p></div>';
+    }
+
+    html += '<div class="subject-hero" id="hero-' + subj + '" style="border-left-color:' + s.color + '">';
+    html += '<div class="subject-hero-icon">' + s.icon + '</div>';
+    html += '<h2 style="color:' + s.color + '">' + s.name + '</h2>';
+    html += '<p class="subject-hero-desc">' + s.desc + '</p>';
+    if(s.placeholder) html += '<p style="margin-top:8px;color:var(--text-light);font-size:13px">该科目内容正在整理中</p>';
+    html += '</div>';
+
+    // Process content: replace existing CSS classes with the new ones
+    content = content
+      .replace(/class="section-title"/g, 'class="sec-title"')
+      .replace(/class="subsection-title"/g, 'class="sub-title"')
+      .replace(/class="block-header /g, 'class="block-hdr bh-')
+      .replace(/block-core"/g, 'core"')
+      .replace(/block-experiment"/g, 'exp"')
+      .replace(/block-rule"/g, 'rule"')
+      .replace(/block-trap"/g, 'trap"')
+      .replace(/block-info"/g, 'info"')
+      .replace(/class="content-block cb-/g, 'class="cp cp-')
+      .replace(/class="example-sentence"/g, 'class="ex-sent"')
+      .replace(/class="ex-diamond"/g, 'class="ex-dia"')
+      .replace(/class="vocab-grid"/g, 'class="vocab-grid"')
+      .replace(/class="vocab-item"/g, 'class="vocab-item"')
+      .replace(/class="vocab-word"/g, 'class="vocab-word"')
+      .replace(/class="vocab-def"/g, 'class="vocab-def"')
+      .replace(/class="shengyi-table"/g, 'class="sy-table"')
+      .replace(/class="sy-word"/g, 'class="sy-word"')
+      .replace(/class="sy-exam"/g, 'class="sy-exam"');
+
+    html += content;
+  }
+
+  main.innerHTML = html;
+}
+
+// ===== THEME =====
+function setupTheme(){
+  var toggle = document.getElementById('themeToggle');
+  var sun = document.getElementById('sunIcon');
+  var moon = document.getElementById('moonIcon');
+
+  function setTheme(dark){
+    document.documentElement.classList.toggle('dark', dark);
+    sun.style.display = dark ? 'none' : '';
+    moon.style.display = dark ? '' : 'none';
+    try{localStorage.setItem('kg-theme', dark ? 'dark' : 'light');}catch(e){}
+  }
+
+  var saved = localStorage.getItem('kg-theme');
+  if(saved){ setTheme(saved === 'dark'); }
+  else { setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches); }
+
+  toggle.onclick = function(){ setTheme(!document.documentElement.classList.contains('dark')); };
+}
+
+// ===== BACK TO TOP =====
+function setupBackTop(){
+  var btn = document.getElementById('backTop');
+  window.addEventListener('scroll', function(){
+    btn.classList.toggle('show', window.scrollY > 400);
+  });
+}
+
+// ===== TOC TOGGLE =====
+function setupTocToggle(){
+  var toggle = document.getElementById('tocToggle');
+  var toc = document.getElementById('tocSidebar');
+  var backdrop = document.getElementById('tocBackdrop');
+
+  function openToc(){
+    toc.classList.add('open');
+    backdrop.classList.add('open');
+  }
+  function closeToc(){
+    toc.classList.remove('open');
+    backdrop.classList.remove('open');
+  }
+
+  toggle.onclick = function(){
+    if(toc.classList.contains('open')) closeToc();
+    else openToc();
+  };
+  backdrop.onclick = closeToc;
+
+  // Close TOC when clicking a link inside it (mobile)
+  toc.addEventListener('click', function(e){
+    if(e.target.tagName === 'A') closeToc();
+  });
+}
+
+// ===== INIT =====
+let searchIndex = [];
+
+async function init(){
+  // Check URL parameter for subject override
+  var params = new URLSearchParams(window.location.search);
+  var urlSubject = params.get('subject');
+
+  setupTheme();
+  await loadAllData();
+  renderAll();
+  buildTOC();
+  setupBottomNav();
+  setupSearch();
+  setupBackTop();
+  setupTocToggle();
+
+  // If URL has subject parameter, scroll to that subject
+  if(urlSubject && SUBJECTS_DATA[urlSubject]){
+    setTimeout(function(){
+      var el = document.getElementById('hero-' + urlSubject);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+    }, 300);
+  }
+}
+document.addEventListener('DOMContentLoaded', init);
+
+// ===== BOTTOM NAV =====
+function setupBottomNav(){
+  var nav = document.createElement('nav');
+  nav.className = 'bottom-nav';
+  nav.id = 'bottomNav';
+  var subjects = [['physics','⚡','物理']];
+  nav.innerHTML = subjects.map(function(s){
+    return '<button class="bottom-nav-btn" data-subj="' + s[0] + '"><span class="bn-icon">' + s[1] + '</span>' + s[2] + '</button>';
+  }).join('');
+  document.body.appendChild(nav);
+
+  // Click to scroll
+  nav.querySelectorAll('.bottom-nav-btn').forEach(function(btn){
+    btn.onclick = function(e){
+      e.preventDefault();
+      var subj = btn.getAttribute('data-subj');
+      var el = document.getElementById('hero-' + subj);
+      if(el) {
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    };
+  });
+}
+
+// ===== SEARCH =====
+function buildSearchIndex(){
+  searchIndex = [];
+  var main = document.getElementById('mainContent');
+  main.querySelectorAll('.sec-title').forEach(function(el){
+    searchIndex.push({type:'section',text:el.textContent.trim(),id:el.id,subject:el.closest('[id^=hero-]')?.id?.replace('hero-','')});
+  });
+  main.querySelectorAll('.sub-title').forEach(function(el){
+    searchIndex.push({type:'subsection',text:el.textContent.trim(),id:el.id,subject:el.closest('[id^=hero-]')?.id?.replace('hero-','')});
+  });
+  main.querySelectorAll('.cp, .cp-core, .cp-exp, .cp-rule, .cp-trap, .ex-sent').forEach(function(el){
+    var t = el.textContent.trim();
+    if(t.length > 10){
+      var hero = el.closest('[id^=hero-]');
+      searchIndex.push({type:'content',text:t.substring(0,120),fullText:t,subject:hero?.id?.replace('hero-',''),id:el.closest('.sec-title, .sub-title')?.id});
+    }
+  });
+}
+
+function setupSearch(){
+  var overlay = document.getElementById('searchOverlay');
+  var input = document.getElementById('searchInput');
+  var results = document.getElementById('searchResults');
+  var toggle = document.getElementById('searchToggle');
+
+  toggle.onclick = function(){
+    overlay.classList.add('open');
+    input.focus();
+    buildSearchIndex();
+  };
+
+  overlay.onclick = function(e){ if(e.target === overlay) closeSearch(); };
+
+  input.oninput = function(){
+    var q = input.value.trim().toLowerCase();
+    if(q.length < 1){ results.innerHTML = ''; return; }
+    var matches = searchIndex.filter(function(i){ return i.text.toLowerCase().indexOf(q) !== -1; }).slice(0, 30);
+    if(matches.length === 0){
+      results.innerHTML = '<div class="search-no-results">未找到相关结果</div>';
+    } else {
+      results.innerHTML = matches.map(function(m,i){
+        var subjName = SUBJECTS_DATA[m.subject]?.name || '';
+        return '<div class="search-result'+(i===0?' focus':'')+'" data-subject="'+m.subject+'" data-id="'+(m.id||'')+'"><div class="search-result-title">'+highlightMatch(m.text,q,60)+'</div><div class="search-result-subject">'+subjName+'</div></div>';
+      }).join('');
+      results.querySelectorAll('.search-result').forEach(function(el){
+        el.onclick = function(){
+          var subj = el.getAttribute('data-subject');
+          var id = el.getAttribute('data-id');
+          closeSearch();
+          if(id){ var t = document.getElementById(id); if(t) t.scrollIntoView({behavior:'smooth'}); }
+        };
+      });
+    }
+  };
+
+  input.onkeydown = function(e){
+    if(e.key === 'Escape') closeSearch();
+    if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      var items = results.querySelectorAll('.search-result');
+      if(!items.length) return;
+      var focused = results.querySelector('.search-result.focus');
+      var idx = focused ? Array.from(items).indexOf(focused) : -1;
+      var next = e.key === 'ArrowDown' ? Math.min(idx+1,items.length-1) : Math.max(idx-1,0);
+      if(focused) focused.classList.remove('focus');
+      items[next].classList.add('focus');
+      items[next].scrollIntoView({block:'nearest'});
+    }
+    if(e.key === 'Enter'){ var f = results.querySelector('.search-result.focus'); if(f) f.click(); }
+  };
+}
+
+function highlightMatch(text, query, maxLen){
+  var t = text.replace(/<[^>]+>/g, '');
+  if(t.length > maxLen){ var idx = t.toLowerCase().indexOf(query.toLowerCase()); var s = Math.max(0, idx-30); t = (s>0?'...':'') + t.substring(s, s+maxLen) + (s+maxLen<t.length?'...':''); }
+  var re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  return t.replace(re, '<mark style="background:rgba(45,123,140,.2);color:var(--chem);border-radius:2px;padding:0 2px">$1</mark>');
+}
+
+function closeSearch(){
+  document.getElementById('searchOverlay').classList.remove('open');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+}
+
+document.addEventListener('keydown', function(e){
+  if((e.ctrlKey || e.metaKey) && e.key === 'k'){ e.preventDefault(); document.getElementById('searchToggle').click(); }
+});
+</script>
+</body>
+</html>
