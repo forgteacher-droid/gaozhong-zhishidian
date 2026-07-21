@@ -260,6 +260,28 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .bottom-nav-btn .bn-icon{font-size:18px;line-height:1}
 @media (max-width:860px){.bottom-nav{display:flex}}
 
+/* ===== SEARCH ===== */
+.search-toggle{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s;font-size:16px;cursor:pointer;border:none;background:none;color:inherit}
+.search-toggle:hover{background:var(--bg-hover)}
+.search-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.3);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;padding-top:120px}
+.search-overlay.open{display:flex}
+.search-modal{background:var(--bg);border:1px solid var(--border);border-radius:10px;width:560px;max-width:90vw;box-shadow:0 8px 40px rgba(0,0,0,.15);overflow:hidden}
+.search-input-wrap{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);gap:12px}
+.search-results{max-height:420px;overflow-y:auto;padding:8px}
+.search-result{padding:10px 16px;border-radius:6px;cursor:pointer;transition:background .15s}
+.search-result:hover,.search-result.focus{background:var(--bg-hover)}
+.search-result-title{font-size:14px;font-weight:600}
+.search-result-context{font-size:12px;color:var(--text-muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.search-result-subject{font-size:11px;color:var(--text-light)}
+.search-no-results{padding:24px;text-align:center;color:var(--text-muted);font-size:14px}
+@media (max-width:500px){
+  .search-overlay{padding-top:0;align-items:stretch}
+  .search-modal{width:100%;max-width:100%;border-radius:0;border:none;height:100vh;display:flex;flex-direction:column}
+  .search-input-wrap{padding:12px 16px}
+  .search-results{max-height:none;flex:1}
+  .search-input-wrap kbd{display:none}
+}
+
 /* Menu button */
 .menu-btn{display:none;width:36px;height:36px;align-items:center;justify-content:center;border-radius:50%;border:none;background:none;cursor:pointer;color:var(--text-muted);font-size:18px}
 .menu-btn:hover{background:var(--bg-hover);color:var(--text)}
@@ -271,6 +293,7 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
   <a class="site-logo" href="#top">📚 <span>高中知识点集合</span></a>
   <div class="header-right">
     <button class="nav-toc-toggle" onclick="document.getElementById('tocSidebar').scrollIntoView({behavior:'smooth'})">📑 目录</button>
+    <button class="search-toggle" id="searchToggle" aria-label="搜索" title="搜索 (Ctrl+K)">🔍</button>
     <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
       <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       <svg id="moonIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -287,6 +310,18 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 </div>
 
 <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">⬆</button>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-modal">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;opacity:.4;flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="搜索知识点..." autocomplete="off" style="flex:1;border:none;background:none;font:inherit;font-size:16px;color:var(--text);outline:none">
+      <kbd style="font-size:11px;padding:2px 8px;border-radius:4px;border:1px solid var(--border);color:var(--text-light)">ESC</kbd>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
 
 <script>
 // ===== DATA =====
@@ -415,9 +450,12 @@ function setupBackTop(){
 }
 
 // ===== INIT =====
+let searchIndex = [];
+
 async function init(){
   setupTheme();
   setupBottomNav();
+  setupSearch();
   await loadAllData();
   renderAll();
   buildTOC();
@@ -453,6 +491,95 @@ function setupBottomNav(){
     };
   });
 }
+
+// ===== SEARCH =====
+function buildSearchIndex(){
+  searchIndex = [];
+  var main = document.getElementById('mainContent');
+  main.querySelectorAll('.sec-title').forEach(function(el){
+    searchIndex.push({type:'section',text:el.textContent.trim(),id:el.id,subject:el.closest('[id^=hero-]')?.id?.replace('hero-','')});
+  });
+  main.querySelectorAll('.sub-title').forEach(function(el){
+    searchIndex.push({type:'subsection',text:el.textContent.trim(),id:el.id,subject:el.closest('[id^=hero-]')?.id?.replace('hero-','')});
+  });
+  main.querySelectorAll('.cp, .cp-core, .cp-exp, .cp-rule, .cp-trap, .ex-sent').forEach(function(el){
+    var t = el.textContent.trim();
+    if(t.length > 10){
+      var hero = el.closest('[id^=hero-]');
+      searchIndex.push({type:'content',text:t.substring(0,120),fullText:t,subject:hero?.id?.replace('hero-',''),id:el.closest('.sec-title, .sub-title')?.id});
+    }
+  });
+}
+
+function setupSearch(){
+  var overlay = document.getElementById('searchOverlay');
+  var input = document.getElementById('searchInput');
+  var results = document.getElementById('searchResults');
+  var toggle = document.getElementById('searchToggle');
+
+  toggle.onclick = function(){
+    overlay.classList.add('open');
+    input.focus();
+    buildSearchIndex();
+  };
+
+  overlay.onclick = function(e){ if(e.target === overlay) closeSearch(); };
+
+  input.oninput = function(){
+    var q = input.value.trim().toLowerCase();
+    if(q.length < 1){ results.innerHTML = ''; return; }
+    var matches = searchIndex.filter(function(i){ return i.text.toLowerCase().indexOf(q) !== -1; }).slice(0, 30);
+    if(matches.length === 0){
+      results.innerHTML = '<div class="search-no-results">未找到相关结果</div>';
+    } else {
+      results.innerHTML = matches.map(function(m,i){
+        var subjName = SUBJECTS_DATA[m.subject]?.name || '';
+        return '<div class="search-result'+(i===0?' focus':'')+'" data-subject="'+m.subject+'" data-id="'+(m.id||'')+'"><div class="search-result-title">'+highlightMatch(m.text,q,60)+'</div><div class="search-result-subject">'+subjName+'</div></div>';
+      }).join('');
+      results.querySelectorAll('.search-result').forEach(function(el){
+        el.onclick = function(){
+          var subj = el.getAttribute('data-subject');
+          var id = el.getAttribute('data-id');
+          closeSearch();
+          if(id){ var t = document.getElementById(id); if(t) t.scrollIntoView({behavior:'smooth'}); }
+        };
+      });
+    }
+  };
+
+  input.onkeydown = function(e){
+    if(e.key === 'Escape') closeSearch();
+    if(e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      var items = results.querySelectorAll('.search-result');
+      if(!items.length) return;
+      var focused = results.querySelector('.search-result.focus');
+      var idx = focused ? Array.from(items).indexOf(focused) : -1;
+      var next = e.key === 'ArrowDown' ? Math.min(idx+1,items.length-1) : Math.max(idx-1,0);
+      if(focused) focused.classList.remove('focus');
+      items[next].classList.add('focus');
+      items[next].scrollIntoView({block:'nearest'});
+    }
+    if(e.key === 'Enter'){ var f = results.querySelector('.search-result.focus'); if(f) f.click(); }
+  };
+}
+
+function highlightMatch(text, query, maxLen){
+  var t = text.replace(/<[^>]+>/g, '');
+  if(t.length > maxLen){ var idx = t.toLowerCase().indexOf(query.toLowerCase()); var s = Math.max(0, idx-30); t = (s>0?'...':'') + t.substring(s, s+maxLen) + (s+maxLen<t.length?'...':''); }
+  var re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  return t.replace(re, '<mark style="background:rgba(45,123,140,.2);color:var(--chem);border-radius:2px;padding:0 2px">$1</mark>');
+}
+
+function closeSearch(){
+  document.getElementById('searchOverlay').classList.remove('open');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+}
+
+document.addEventListener('keydown', function(e){
+  if((e.ctrlKey || e.metaKey) && e.key === 'k'){ e.preventDefault(); document.getElementById('searchToggle').click(); }
+});
 </script>
 </body>
 </html>
