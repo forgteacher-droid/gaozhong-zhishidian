@@ -573,23 +573,7 @@ function setupBottomNav(){
 }
 
 // ===== SEARCH =====
-function buildSearchIndex(){
-  searchIndex = [];
-  var main = document.getElementById('mainContent');
-  main.querySelectorAll('.sec-title').forEach(function(el){
-    searchIndex.push({type:'section',text:el.textContent.trim(),id:el.id,subject:el.closest('[id^=hero-]')?.id?.replace('hero-','')});
-  });
-  main.querySelectorAll('.sub-title').forEach(function(el){
-    searchIndex.push({type:'subsection',text:el.textContent.trim(),id:el.id,subject:el.closest('[id^=hero-]')?.id?.replace('hero-','')});
-  });
-  main.querySelectorAll('.cp, .cp-core, .cp-exp, .cp-rule, .cp-trap, .ex-sent').forEach(function(el){
-    var t = el.textContent.trim();
-    if(t.length > 10){
-      var hero = el.closest('[id^=hero-]');
-      searchIndex.push({type:'content',text:t.substring(0,120),fullText:t,subject:hero?.id?.replace('hero-',''),id:el.closest('.sec-title, .sub-title')?.id});
-    }
-  });
-}
+
 
 function setupSearch(){
   var overlay = document.getElementById('searchOverlay');
@@ -597,34 +581,24 @@ function setupSearch(){
   var results = document.getElementById('searchResults');
   var toggle = document.getElementById('searchToggle');
 
-  toggle.onclick = function(){
+  toggle.onclick = async function(){
     overlay.classList.add('open');
     input.focus();
-    buildSearchIndex();
+    if(!CROSS_LOADED){
+      results.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted)"><div style="font-size:28px;margin-bottom:8px">🔍</div>正在建立六科索引...</div>';
+      await loadCrossIndex();
+      results.innerHTML = '';
+    }
   };
 
   overlay.onclick = function(e){ if(e.target === overlay) closeSearch(); };
 
-  input.oninput = function(){
-    var q = input.value.trim().toLowerCase();
+  input.oninput = async function(){
+    var q = input.value.trim();
     if(q.length < 1){ results.innerHTML = ''; return; }
-    var matches = searchIndex.filter(function(i){ return i.text.toLowerCase().indexOf(q) !== -1; }).slice(0, 30);
-    if(matches.length === 0){
-      results.innerHTML = '<div class="search-no-results">未找到相关结果</div>';
-    } else {
-      results.innerHTML = matches.map(function(m,i){
-        var subjName = SUBJECTS_DATA[m.subject]?.name || '';
-        return '<div class="search-result'+(i===0?' focus':'')+'" data-subject="'+m.subject+'" data-id="'+(m.id||'')+'"><div class="search-result-title">'+highlightMatch(m.text,q,60)+'</div><div class="search-result-subject">'+subjName+'</div></div>';
-      }).join('');
-      results.querySelectorAll('.search-result').forEach(function(el){
-        el.onclick = function(){
-          var subj = el.getAttribute('data-subject');
-          var id = el.getAttribute('data-id');
-          closeSearch();
-          if(id){ var t = document.getElementById(id); if(t) t.scrollIntoView({behavior:'smooth'}); }
-        };
-      });
-    }
+    if(!CROSS_LOADED){ await loadCrossIndex(); }
+    var matches = crossSearch(q);
+    renderSearchResults(matches, q);
   };
 
   input.onkeydown = function(e){
@@ -642,14 +616,28 @@ function setupSearch(){
     }
     if(e.key === 'Enter'){ var f = results.querySelector('.search-result.focus'); if(f) f.click(); }
   };
+
+  function renderSearchResults(matches, q){
+    if(matches.length === 0){
+      results.innerHTML = '<div class="search-no-results">未找到相关结果 · 试试其他关键词</div>';
+    } else {
+      results.innerHTML = matches.map(function(m, i){
+        var subjPage = m.subject + '.html';
+        var url = subjPage + (m.id ? '#' + m.id : '');
+        return '<div class="search-result'+(i===0?' focus':'')+'" data-url="'+url+'"><div class="search-result-title" style="font-size:14px">'+m.subjectIcon+' '+highlightMatch(m.title || m.text, q, 80)+'</div><div class="search-result-context" style="font-size:11px;color:var(--text-light);margin-top:2px">'+SUBJECTS_META[m.subject].name+' · '+m.type+'</div></div>';
+      }).join('');
+      results.querySelectorAll('.search-result').forEach(function(el){
+        el.onclick = function(){
+          var url = el.getAttribute('data-url');
+          closeSearch();
+          window.location.href = url;
+        };
+      });
+    }
+  }
 }
 
-function highlightMatch(text, query, maxLen){
-  var t = text.replace(/<[^>]+>/g, '');
-  if(t.length > maxLen){ var idx = t.toLowerCase().indexOf(query.toLowerCase()); var s = Math.max(0, idx-30); t = (s>0?'...':'') + t.substring(s, s+maxLen) + (s+maxLen<t.length?'...':''); }
-  var re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-  return t.replace(re, '<mark style="background:rgba(45,123,140,.2);color:var(--chem);border-radius:2px;padding:0 2px">$1</mark>');
-}
+
 
 function closeSearch(){
   document.getElementById('searchOverlay').classList.remove('open');
@@ -657,9 +645,96 @@ function closeSearch(){
   document.getElementById('searchResults').innerHTML = '';
 }
 
+
 document.addEventListener('keydown', function(e){
   if((e.ctrlKey || e.metaKey) && e.key === 'k'){ e.preventDefault(); document.getElementById('searchToggle').click(); }
 });
+
+
+// ===== CROSS-SUBJECT SEARCH =====
+const ALL_SUBJECTS = ['chinese','math','english','physics','chemistry','biology'];
+const SUBJECTS_META = {
+  chinese: {name:"语文",icon:"📝",color:"#C4523B"},
+  math: {name:"数学",icon:"📐",color:"#4E5283"},
+  english: {name:"英语",icon:"📖",color:"#C44D6A"},
+  physics: {name:"物理",icon:"⚡",color:"#B87D3C"},
+  chemistry: {name:"化学",icon:"⚗️",color:"#2D7B8C"},
+  biology: {name:"生物",icon:"🧬",color:"#3D7A4A"}
+};
+let CROSS_INDEX = {};
+let CROSS_LOADED = false;
+
+async function loadCrossIndex(){
+  if(CROSS_LOADED) return;
+  var results = document.getElementById('searchResults');
+  results.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-muted)">正在建立六科索引...</div>';
+
+  var promises = ALL_SUBJECTS.map(async function(subj){
+    try {
+      var resp = await fetch('data_' + subj + '.json');
+      if(!resp.ok) throw new Error('HTTP ' + resp.status);
+      var json = await resp.json();
+      var content = json.content || '';
+      // Extract searchable text (strip HTML tags, keep Chinese text and keywords)
+      var text = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      var entries = [];
+      // Split by H2 sections
+      var secRe = /<h2 class="section-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h2>/g;
+      var m;
+      while((m = secRe.exec(content)) !== null){
+        var secId = m[1];
+        var secTitle = m[2].replace(/<[^>]+>/g,'');
+        // Get content until next H2
+        var secStart = m.index + m[0].length;
+        var nextSec = content.indexOf('<h2 class="section-title"', secStart);
+        if(nextSec < 0) nextSec = content.length;
+        var secBody = content.substring(secStart, nextSec);
+        var secText = secBody.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+        entries.push({
+          type: 'section',
+          title: secTitle,
+          id: secId,
+          text: (secTitle + ' ' + secText).substring(0, 300),
+          subject: subj,
+          subjectName: SUBJECTS_META[subj].name,
+          subjectIcon: SUBJECTS_META[subj].icon
+        });
+      }
+      return entries;
+    } catch(e){
+      console.warn('Failed to load', subj, e);
+      return [];
+    }
+  });
+
+  var allResults = await Promise.all(promises);
+  var flat = [];
+  allResults.forEach(function(r){ flat = flat.concat(r); });
+  CROSS_INDEX = flat;
+  CROSS_LOADED = true;
+  results.innerHTML = '';
+}
+
+function crossSearch(query){
+  if(query.length < 1) return [];
+  var q = query.toLowerCase();
+  return CROSS_INDEX.filter(function(entry){
+    return entry.text.toLowerCase().indexOf(q) !== -1;
+  }).slice(0, 30);
+}
+
+function highlightMatch(text, query, maxLen){
+  var t = text.replace(/<[^>]+>/g, '');
+  if(t.length > maxLen){
+    var idx = t.toLowerCase().indexOf(query.toLowerCase());
+    var s = Math.max(0, idx - 30);
+    t = (s > 0 ? '...' : '') + t.substring(s, s + maxLen) + (s + maxLen < t.length ? '...' : '');
+  }
+  var escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  var re = new RegExp('(' + escaped + ')', 'gi');
+  return t.replace(re, '<mark style="background:rgba(45,123,140,.2);color:var(--chem);border-radius:2px;padding:0 2px">$1</mark>');
+}
+
 </script>
 </body>
 </html>
