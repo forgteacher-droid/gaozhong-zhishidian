@@ -331,19 +331,19 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 <script>
 // ===== DATA =====
 const SUBJECTS_DATA = {
-  chemistry: {name:"化学",icon:"⚗️",color:"#2D7B8C",desc:"元素化合物 · 反应原理 · 化学实验 · 物质结构 · 有机化学"},
+  chinese: {name:"语文",icon:"📝",color:"#C4523B",desc:"必背篇目 · 实词虚词 · 成语 · 阅读答题 · 作文"},
   math: {name:"数学",icon:"📐",color:"#4E5283",desc:"导数 · 解析几何 · 三角函数 · 立体几何 · 统计概率"},
-  physics: {name:"物理",icon:"⚡",color:"#B87D3C",desc:"运动学力学 · 电学 · 磁学 · 热学光学 · 原子物理"},
-  biology: {name:"生物",icon:"🧬",color:"#3D7A4A",desc:"遗传与进化 · 生物技术与工程 · 分子与细胞"},
   english: {name:"英语",icon:"📖",color:"#C44D6A",desc:"高频词汇 · 语法专题 · 应用文写作 · 读后续写"},
-  chinese: {name:"语文",icon:"📝",color:"#C4523B",desc:"必背篇目 · 实词虚词 · 成语 · 阅读答题 · 作文"}
+  physics: {name:"物理",icon:"⚡",color:"#B87D3C",desc:"运动学力学 · 电学 · 磁学 · 热学光学 · 原子物理"},
+  chemistry: {name:"化学",icon:"⚗️",color:"#2D7B8C",desc:"元素化合物 · 反应原理 · 化学实验 · 物质结构 · 有机化学"},
+  biology: {name:"生物",icon:"🧬",color:"#3D7A4A",desc:"遗传与进化 · 生物技术与工程 · 分子与细胞"}
 };
 
 let ALL_DATA = {};
 
 // ===== LOAD ALL DATA FILES =====
 async function loadAllData(){
-  const subjects = ['chemistry','math','physics','biology','english','chinese'];
+  const subjects = ['chinese','math','english','physics','chemistry','biology'];
   const promises = subjects.map(async function(subj){
     try {
       const resp = await fetch('data_' + subj + '.json');
@@ -537,12 +537,12 @@ function setupBottomNav(){
   nav.className = 'bottom-nav';
   nav.id = 'bottomNav';
   var subjects = [
-    ['chemistry','⚗️','化学'],
+    ['chinese','📝','语文'],
     ['math','📐','数学'],
-    ['physics','⚡','物理'],
-    ['biology','🧬','生物'],
     ['english','📖','英语'],
-    ['chinese','📝','语文']
+    ['physics','⚡','物理'],
+    ['chemistry','⚗️','化学'],
+    ['biology','🧬','生物']
   ];
   nav.innerHTML = subjects.map(function(s){
     return '<button class="bottom-nav-btn" data-subj="' + s[0] + '"><span class="bn-icon">' + s[1] + '</span>' + s[2] + '</button>';
