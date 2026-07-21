@@ -371,15 +371,15 @@ function buildTOC(){
     html += '<div class="toc-subject" data-toc-subj="' + subj + '" data-toc-name="' + s.name + '">';
     html += '<details><summary>' + s.icon + ' <span class="toc-subj-name">' + s.name + '</span></summary><div class="toc-section">';
     html += '<a href="#hero-' + subj + '" class="toc-overview" data-toc-text="' + s.name + ' 概览">' + s.icon + ' 概览</a>';
-    // Find all h2 sections and their h3 subsections
-    var secRe = /<h2 class="sec-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h2>([\s\S]*?)(?=<h2 class="sec-title"|$)/g;
+    // Find all h2 sections and their h3 subsections (data uses original class names 'section-title' and 'subsection-title')
+    var secRe = /<h2 class="section-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h2>([\s\S]*?)(?=<h2 class="section-title"|$)/g;
     var secMatch;
     while((secMatch = secRe.exec(content)) !== null){
       var secTitle = secMatch[2].replace(/<[^>]+>/g,'').substring(0,50);
       var secBody = secMatch[3];
       html += '<a href="#' + secMatch[1] + '" class="toc-section-link" data-toc-text="' + secTitle + '">' + secTitle + '</a>';
       // Find sub-sections within this section
-      var subRe = /<h3 class="sub-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h3>/g;
+      var subRe = /<h3 class="subsection-title"[^>]*id="([^"]*)"[^>]*>(.*?)<\/h3>/g;
       var subMatch;
       while((subMatch = subRe.exec(secBody)) !== null){
         var subTitle = subMatch[2].replace(/<[^>]+>/g,'').substring(0,40);
