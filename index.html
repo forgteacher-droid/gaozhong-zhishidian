@@ -324,16 +324,16 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       var zoom = document.createElement('div');
       zoom.style.cssText = [
         'position:absolute',
-        'left:' + cx + 'px',
-        'top:' + cy + 'px',
+        'left:50%',
+        'top:50%',
         'transform:translate(-50%,-50%) scale(0.05)',
         'color:white',
-        'font-size:32px',
+        'font-size:36px',
         'font-weight:800',
         'font-family:"Noto Serif SC","STSong",serif',
         'white-space:nowrap',
         'pointer-events:none',
-        'animation:labelZoom 0.45s 0.45s cubic-bezier(.34,1.56,.64,1) forwards'
+        'animation:labelZoom 0.5s 0.45s cubic-bezier(.34,1.56,.64,1) forwards'
       ].join(';');
       zoom.textContent = icon + ' ' + label + '知识点';
       overlay.appendChild(zoom);
