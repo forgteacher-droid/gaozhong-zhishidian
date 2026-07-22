@@ -324,66 +324,52 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       var vw = window.innerWidth;
       var vh = window.innerHeight;
 
-      // Phase 1: Clone the card content into fragments that split apart
-      // First capture a visual snapshot of the card using cloneNode or by copying its DOM
-      var cardIcon = card.querySelector('.card-icon');
-      var cardLabel = card.querySelector('.card-label');
-      var cardSub = card.querySelector('.card-sub');
-
-      // Split the card into 6 rectangular fragments (3x2 grid), each showing a portion
-      // We use background-clip to show the actual card content
+      // Phase 1: Split the card into 6 rectangular fragments that fly apart
       var cols = 3, rows = 2;
       var fragW = cardW / cols, fragH = cardH / rows;
-      var cardBg = getComputedStyle(card).background;
-      var cardRadius = getComputedStyle(card).borderRadius;
 
       for(var row=0; row<rows; row++){
         for(var col=0; col<cols; col++){
           var frag = document.createElement('div');
           var fx = rect.left + col * fragW;
           var fy = rect.top + row * fragH;
-          // Calculate which part of the card this fragment shows
-          var bgX = -(col * fragW);
-          var bgY = -(row * fragH);
 
-          frag.style.cssText = [
+          // Fragment basic style
+          var fragStyles = [
             'position:fixed',
             'left:' + fx + 'px',
             'top:' + fy + 'px',
             'width:' + fragW + 'px',
             'height:' + fragH + 'px',
-            'background-color:' + color,
-            'background-image:url(data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+fragW+'" height="'+fragH+'"><rect width="'+fragW+'" height="'+fragH+'" fill="'+color+'"/></svg>') + ')',
-            'border:2px solid rgba(255,255,255,0.5)',
-            'box-shadow:0 0 10px rgba(0,0,0,0.2)',
+            'background:' + color,
+            'border:1px solid rgba(255,255,255,0.4)',
             'pointer-events:none',
-            'animation:cardFrag 0.6s ' + (Math.random()*0.3) + 's ease-out forwards',
-            '--dx:' + ((col-1)*90+Math.random()*60-30) + 'px',
-            '--dy:' + ((row-0.5)*100+Math.random()*50-25) + 'px',
-            '--rot:' + ((Math.random()-0.5)*90) + 'deg'
-          ].join(';');
+            'animation:cardFrag 0.5s ' + (Math.random()*0.25) + 's ease-out forwards',
+            '--dx:' + ((col-1)*100+Math.random()*50-25) + 'px',
+            '--dy:' + ((row-0.5)*110+Math.random()*40-20) + 'px',
+            '--rot:' + ((Math.random()-0.5)*70) + 'deg'
+          ];
 
-          // Add icon/label text to the center fragment (col=1, row=0)
+          // Center fragments show card content
           if(col === 1 && row === 0){
-            frag.style.display = 'flex';
-            frag.style.alignItems = 'center';
-            frag.style.justifyContent = 'center';
-            frag.style.flexDirection = 'column';
-            frag.style.color = 'white';
-            frag.style.textShadow = '0 1px 3px rgba(0,0,0,0.4)';
-            frag.innerHTML = '<span style="font-size:' + (cardW*0.25) + 'px">' + icon.textContent + '</span>';
-          }
-          if(col === 1 && row === 1){
-            frag.style.display = 'flex';
-            frag.style.alignItems = 'center';
-            frag.style.justifyContent = 'center';
-            frag.style.color = 'white';
-            frag.style.fontWeight = '600';
-            frag.style.fontSize = (cardW*0.12) + 'px';
-            frag.style.textShadow = '0 1px 3px rgba(0,0,0,0.4)';
+            fragStyles.push('display:flex');
+            fragStyles.push('align-items:center');
+            fragStyles.push('justify-content:center');
+            fragStyles.push('color:white');
+            fragStyles.push('font-size:' + Math.round(cardW*0.22) + 'px');
+            frag.innerHTML = icon.textContent;
+          } else if(col === 1 && row === 1){
+            fragStyles.push('display:flex');
+            fragStyles.push('align-items:center');
+            fragStyles.push('justify-content:center');
+            fragStyles.push('color:white');
+            fragStyles.push('font-size:' + Math.round(cardW*0.14) + 'px');
+            fragStyles.push('font-weight:600');
+            fragStyles.push('text-shadow:0 1px 2px rgba(0,0,0,0.3)');
             frag.textContent = label.textContent;
           }
 
+          frag.style.cssText = fragStyles.join(';');
           overlay.appendChild(frag);
         }
       }
