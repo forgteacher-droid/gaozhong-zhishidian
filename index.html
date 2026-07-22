@@ -296,27 +296,22 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       e.preventDefault();
       var url = card.getAttribute('href');
       var color = card.getAttribute('data-color') || '#C4523B';
+      var subj = card.getAttribute('data-subject') || card.getAttribute('href').replace('.html','');
       var label = card.querySelector('.card-label').textContent;
       var icon = card.querySelector('.card-icon').textContent;
       var rect = card.getBoundingClientRect();
-      var cx = rect.left + rect.width/2;
-      var cy = rect.top + rect.height/2;
       var cardW = rect.width;
       var cardH = rect.height;
 
-      // Phase 0: Hide all other cards with a quick fade, shatter the clicked card
+      // Phase 0: Hide all cards and title
       var allCards = document.querySelectorAll('.card');
-      allCards.forEach(function(c){
-        if(c !== card) c.style.opacity = '0';
-        else c.style.opacity = '0'; // clicked card also hides for shatter effect
-      });
-      // Hide the title too
+      allCards.forEach(function(c){ c.style.opacity = '0'; });
       var title = document.querySelector('h1');
       if(title) title.style.opacity = '0';
       var footer = document.querySelector('.footer');
       if(footer) footer.style.opacity = '0';
 
-      // Phase 1: Fill background with card color
+      // Phase 1: Show full card image briefly, then replace with fragments
       overlay.style.background = color;
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -324,58 +319,40 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       var vw = window.innerWidth;
       var vh = window.innerHeight;
 
-      // Phase 1: Split the card into 6 rectangular fragments that fly apart
+      // Use pre-generated fragment images
       var cols = 3, rows = 2;
       var fragW = cardW / cols, fragH = cardH / rows;
 
+      // Map href to subject key
+      var subjMap = {'chinese.html':'chinese','math.html':'math','english.html':'english',
+                     'physics.html':'physics','chemistry.html':'chemistry','biology.html':'biology'};
+      var subjKey = subjMap[subj] || subj;
+
       for(var row=0; row<rows; row++){
         for(var col=0; col<cols; col++){
-          var frag = document.createElement('div');
+          var frag = document.createElement('img');
+          frag.src = 'img/frag_' + subjKey + '_' + row + '_' + col + '.png';
           var fx = rect.left + col * fragW;
           var fy = rect.top + row * fragH;
-
-          // Fragment basic style
-          var fragStyles = [
+          frag.style.cssText = [
             'position:fixed',
             'left:' + fx + 'px',
             'top:' + fy + 'px',
             'width:' + fragW + 'px',
             'height:' + fragH + 'px',
-            'background:' + color,
-            'border:2px solid rgba(255,255,255,0.8)',
-            'box-shadow:0 0 12px rgba(0,0,0,0.3), inset 0 0 8px rgba(255,255,255,0.15)',
+            'border:2px solid rgba(255,255,255,0.9)',
+            'box-shadow:0 0 14px rgba(0,0,0,0.35)',
             'pointer-events:none',
             'animation:cardFrag 0.5s ' + (Math.random()*0.25) + 's ease-out forwards',
             '--dx:' + ((col-1)*100+Math.random()*50-25) + 'px',
             '--dy:' + ((row-0.5)*110+Math.random()*40-20) + 'px',
             '--rot:' + ((Math.random()-0.5)*70) + 'deg'
-          ];
-
-          // Center fragments show card content
-          if(col === 1 && row === 0){
-            fragStyles.push('display:flex');
-            fragStyles.push('align-items:center');
-            fragStyles.push('justify-content:center');
-            fragStyles.push('color:white');
-            fragStyles.push('font-size:' + Math.round(cardW*0.22) + 'px');
-            frag.innerHTML = icon.textContent;
-          } else if(col === 1 && row === 1){
-            fragStyles.push('display:flex');
-            fragStyles.push('align-items:center');
-            fragStyles.push('justify-content:center');
-            fragStyles.push('color:white');
-            fragStyles.push('font-size:' + Math.round(cardW*0.14) + 'px');
-            fragStyles.push('font-weight:600');
-            fragStyles.push('text-shadow:0 1px 2px rgba(0,0,0,0.3)');
-            frag.textContent = label.textContent;
-          }
-
-          frag.style.cssText = fragStyles.join(';');
+          ].join(';');
           overlay.appendChild(frag);
         }
       }
 
-      // Phase 2: small particles from corners/edges
+      // Phase 2: small particles
       for(var i=0; i<20; i++){
         var p = document.createElement('div');
         var px = rect.left + (i<5 ? 4 : i<10 ? cardW-4 : cardW/2);
@@ -384,12 +361,12 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
           'position:fixed',
           'left:' + px + 'px',
           'top:' + py + 'px',
-          'width:' + (2+Math.random()*5) + 'px',
-          'height:' + (2+Math.random()*5) + 'px',
+          'width:' + (3+Math.random()*5) + 'px',
+          'height:' + (3+Math.random()*5) + 'px',
           'background:' + color,
-          'border:2px solid rgba(255,255,255,0.8)',
+          'border:2px solid rgba(255,255,255,0.9)',
           'border-radius:2px',
-          'box-shadow:0 0 6px rgba(0,0,0,0.2)',
+          'box-shadow:0 0 6px rgba(0,0,0,0.25)',
           'pointer-events:none',
           'animation:shatterBurst 0.5s '+ (Math.random()*0.2) + 's ease-out forwards',
           '--dx:' + ((Math.random()-0.5)*250) + 'px',
