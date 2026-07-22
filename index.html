@@ -304,10 +304,11 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       var cardW = rect.width;
       var cardH = rect.height;
 
-      // Phase 0: Hide all other cards with a quick fade
+      // Phase 0: Hide all other cards with a quick fade, shatter the clicked card
       var allCards = document.querySelectorAll('.card');
       allCards.forEach(function(c){
         if(c !== card) c.style.opacity = '0';
+        else c.style.opacity = '0'; // clicked card also hides for shatter effect
       });
       // Hide the title too
       var title = document.querySelector('h1');
@@ -315,8 +316,8 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       var footer = document.querySelector('.footer');
       if(footer) footer.style.opacity = '0';
 
-      // Phase 1: Fill background
-      overlay.style.background = 'transparent';
+      // Phase 1: Fill background with card color
+      overlay.style.background = color;
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
 
