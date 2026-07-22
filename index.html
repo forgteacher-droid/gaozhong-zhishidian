@@ -122,28 +122,17 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
 .transition-overlay{
   position:fixed;inset:0;z-index:999;pointer-events:none;opacity:0;
   display:flex;align-items:center;justify-content:center;
-  transition:opacity 0s;
+  transition:opacity 0.15s;overflow:hidden;
 }
-.transition-overlay.active{opacity:1}
-.transition-shatter{
-  position:absolute;width:8px;height:8px;border-radius:2px;
-  animation:shatterOut 0.6s ease-out forwards;
+.transition-overlay.active{opacity:1;pointer-events:all}
+@keyframes shatterBurst{
+  0%{transform:translate(0,0) scale(1) rotate(0deg);opacity:1}
+  100%{transform:translate(var(--dx),var(--dy)) scale(0) rotate(var(--rot));opacity:0}
 }
-@keyframes shatterOut{
-  0%{transform:translate(0,0) scale(1);opacity:1}
-  100%{transform:translate(var(--sx),var(--sy)) scale(0);opacity:0}
-}
-.transition-zoom{
-  position:absolute;color:white;font-size:30px;font-weight:800;
-  font-family:"Noto Serif SC","STSong",serif;
-  animation:zoomIn 0.5s 0.4s ease-out forwards;
-  transform:scale(0.1);opacity:0;
-  white-space:nowrap;
-}
-@keyframes zoomIn{
-  0%{transform:scale(0.1);opacity:0}
-  60%{transform:scale(1.3);opacity:1}
-  100%{transform:scale(1);opacity:0}
+@keyframes labelZoom{
+  0%{transform:translate(-50%,-50%) scale(0.05);opacity:0}
+  60%{transform:translate(-50%,-50%) scale(1.2);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(1.1);opacity:0.7}
 }
 </style>
 </head>
@@ -298,42 +287,61 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       e.preventDefault();
       var url = card.getAttribute('href');
       var color = card.getAttribute('data-color') || '#C4523B';
+      var label = card.querySelector('.card-label').textContent;
+      var icon = card.querySelector('.card-icon').textContent;
       var rect = card.getBoundingClientRect();
       var cx = rect.left + rect.width/2;
       var cy = rect.top + rect.height/2;
 
-      // Fill overlay with particles
+      // Phase 1: Fill background
       overlay.style.background = color;
       overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
 
-      // Shatter: create 30 particles from card center
-      for(var i=0; i<30; i++){
+      // Phase 1: Shatter the card — particles burst from card position
+      var count = 40;
+      for(var i=0; i<count; i++){
         var p = document.createElement('div');
-        p.className = 'transition-shatter';
-        p.style.position = 'absolute';
-        p.style.left = cx + 'px';
-        p.style.top = cy + 'px';
-        p.style.background = color;
-        p.style.width = (4+Math.random()*10) + 'px';
-        p.style.height = (4+Math.random()*10) + 'px';
-        p.style.setProperty('--sx', (Math.random()-0.5)*400 + 'px');
-        p.style.setProperty('--sy', (Math.random()-0.5)*400 + 'px');
+        p.style.cssText = [
+          'position:absolute',
+          'left:' + cx + 'px',
+          'top:' + cy + 'px',
+          'width:' + (3+Math.random()*14) + 'px',
+          'height:' + (3+Math.random()*14) + 'px',
+          'background:' + color,
+          'border-radius:3px',
+          'pointer-events:none',
+          'animation:shatterBurst 0.5s cubic-bezier(.25,.46,.45,.94) forwards',
+          'animation-delay:' + (Math.random()*0.15) + 's',
+          '--dx:' + ((Math.random()-0.5)*500) + 'px',
+          '--dy:' + ((Math.random()-0.5)*500) + 'px',
+          '--rot:' + (Math.random()*720-360) + 'deg'
+        ].join(';');
         overlay.appendChild(p);
       }
 
-      // Zoom: subject name growing from center
+      // Phase 2 (0.45s delay): Subject label zooms in from center
       var zoom = document.createElement('div');
-      zoom.className = 'transition-zoom';
-      zoom.textContent = card.querySelector('.card-label').textContent + '知识点';
-      zoom.style.left = cx + 'px';
-      zoom.style.top = cy + 'px';
-      zoom.style.transform = 'translate(-50%,-50%) scale(0.1)';
+      zoom.style.cssText = [
+        'position:absolute',
+        'left:' + cx + 'px',
+        'top:' + cy + 'px',
+        'transform:translate(-50%,-50%) scale(0.05)',
+        'color:white',
+        'font-size:32px',
+        'font-weight:800',
+        'font-family:"Noto Serif SC","STSong",serif',
+        'white-space:nowrap',
+        'pointer-events:none',
+        'animation:labelZoom 0.45s 0.45s cubic-bezier(.34,1.56,.64,1) forwards'
+      ].join(';');
+      zoom.textContent = icon + ' ' + label + '知识点';
       overlay.appendChild(zoom);
 
-      // Navigate after animation
+      // Navigate after full animation (~1s)
       setTimeout(function(){
         window.location.href = url;
-      }, 800);
+      }, 950);
     });
   });
 })();
