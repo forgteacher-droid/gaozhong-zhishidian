@@ -125,16 +125,21 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
   transition:opacity 0.15s;overflow:hidden;
 }
 .transition-overlay.active{opacity:1;pointer-events:all}
+@keyframes cardFrag{
+  0%{transform:translate(0,0) rotate(0deg);opacity:1}
+  100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0}
+}
 @keyframes shatterBurst{
   0%{transform:translate(0,0) scale(1) rotate(0deg);opacity:1}
   100%{transform:translate(var(--dx),var(--dy)) scale(0) rotate(var(--rot));opacity:0}
 }
 @keyframes labelZoom{
   0%{transform:translate(-50%,-50%) scale(0.05);opacity:0}
-  60%{transform:translate(-50%,-50%) scale(1.15);opacity:1}
-  100%{transform:translate(-50%,-50%) scale(1.05);opacity:0.8}
+  50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}
+  85%{transform:translate(-50%,-50%) scale(1);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(0.9);opacity:0.6}
 }
-/* Phone: particles spread to viewport edges */
+/* Phone */
 @media (max-width:500px){
   .transition-overlay{font-size:24px}
 }
@@ -296,41 +301,78 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       var rect = card.getBoundingClientRect();
       var cx = rect.left + rect.width/2;
       var cy = rect.top + rect.height/2;
+      var cardW = rect.width;
+      var cardH = rect.height;
+
+      // Phase 0: Hide all other cards with a quick fade
+      var allCards = document.querySelectorAll('.card');
+      allCards.forEach(function(c){
+        if(c !== card) c.style.opacity = '0';
+      });
+      // Hide the title too
+      var title = document.querySelector('h1');
+      if(title) title.style.opacity = '0';
+      var footer = document.querySelector('.footer');
+      if(footer) footer.style.opacity = '0';
 
       // Phase 1: Fill background
-      overlay.style.background = color;
+      overlay.style.background = 'transparent';
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
 
-      // Calculate viewport center for particle burst
       var vw = window.innerWidth;
       var vh = window.innerHeight;
-      var spreadX = Math.max(vw * 0.3, 200);
-      var spreadY = Math.max(vh * 0.25, 150);
 
-      // Phase 1: Shatter the card — particles burst from card position
-      var count = 40;
-      for(var i=0; i<count; i++){
+      // Phase 1: Card breaks apart — 6 rectangular fragments split from the card
+      var cols = 3, rows = 2;
+      var fragW = cardW / cols, fragH = cardH / rows;
+      for(var row=0; row<rows; row++){
+        for(var col=0; col<cols; col++){
+          var frag = document.createElement('div');
+          var fx = rect.left + col * fragW;
+          var fy = rect.top + row * fragH;
+          frag.style.cssText = [
+            'position:fixed',
+            'left:' + fx + 'px',
+            'top:' + fy + 'px',
+            'width:' + (fragW-2) + 'px',
+            'height:' + (fragH-2) + 'px',
+            'background:' + color,
+            'border-radius:4px',
+            'pointer-events:none',
+            'animation:cardFrag 0.5s ' + (Math.random()*0.4) + 's ease-out forwards',
+            '--dx:' + ((col-1)*60+Math.random()*80-40) + 'px',
+            '--dy:' + ((row-0.5)*80+Math.random()*60-30) + 'px',
+            '--rot:' + ((Math.random()-0.5)*60) + 'deg',
+            '--fade:' + (0.6+Math.random()*0.4)
+          ].join(';');
+          overlay.appendChild(frag);
+        }
+      }
+
+      // Phase 2: small shatter particles from corners
+      for(var i=0; i<24; i++){
         var p = document.createElement('div');
+        var cornerX = rect.left + (i%2===0 ? 2 : cardW-2);
+        var cornerY = rect.top + (i<6 ? 2 : i<12 ? cardH/2 : cardH-2);
         p.style.cssText = [
           'position:fixed',
-          'left:' + cx + 'px',
-          'top:' + cy + 'px',
-          'width:' + (3+Math.random()*14) + 'px',
-          'height:' + (3+Math.random()*14) + 'px',
+          'left:' + cornerX + 'px',
+          'top:' + cornerY + 'px',
+          'width:' + (2+Math.random()*6) + 'px',
+          'height:' + (2+Math.random()*6) + 'px',
           'background:' + color,
-          'border-radius:3px',
+          'border-radius:2px',
           'pointer-events:none',
-          'animation:shatterBurst 0.5s cubic-bezier(.25,.46,.45,.94) forwards',
-          'animation-delay:' + (Math.random()*0.15) + 's',
-          '--dx:' + ((Math.random()-0.5)*spreadX*2) + 'px',
-          '--dy:' + ((Math.random()-0.5)*spreadY*2) + 'px',
-          '--rot:' + (Math.random()*720-360) + 'deg'
+          'animation:shatterBurst 0.5s '+ (Math.random()*0.2) + 's ease-out forwards',
+          '--dx:' + ((Math.random()-0.5)*300) + 'px',
+          '--dy:' + ((Math.random()-0.5)*300) + 'px',
+          '--rot:' + (Math.random()*540-270) + 'deg'
         ].join(';');
         overlay.appendChild(p);
       }
 
-      // Phase 2 (0.45s delay): Subject label zooms in from center
+      // Phase 3 (0.5s delay): Subject label zooms in from viewport center
       var zoom = document.createElement('div');
       zoom.style.cssText = [
         'position:fixed',
@@ -338,20 +380,21 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
         'top:50vh',
         'transform:translate(-50%,-50%) scale(0.05)',
         'color:white',
-        'font-size:' + (vw < 500 ? '24px' : '36px') + '',
+        'font-size:' + (vw < 500 ? '26px' : '40px') + '',
         'font-weight:800',
         'font-family:"Noto Serif SC","STSong",serif',
         'white-space:nowrap',
         'pointer-events:none',
-        'animation:labelZoom 0.5s 0.45s cubic-bezier(.34,1.56,.64,1) forwards'
+        'animation:labelZoom 0.5s 0.5s cubic-bezier(.34,1.56,.64,1) forwards',
+        'text-shadow:0 2px 12px rgba(0,0,0,0.3)'
       ].join(';');
       zoom.textContent = icon + ' ' + label + '知识点';
       overlay.appendChild(zoom);
 
-      // Navigate after full animation (~1s)
+      // Navigate after full animation (~1.2s)
       setTimeout(function(){
         window.location.href = url;
-      }, 950);
+      }, 1100);
     });
   });
 })();
