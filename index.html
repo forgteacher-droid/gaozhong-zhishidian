@@ -131,8 +131,12 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
 }
 @keyframes labelZoom{
   0%{transform:translate(-50%,-50%) scale(0.05);opacity:0}
-  60%{transform:translate(-50%,-50%) scale(1.2);opacity:1}
-  100%{transform:translate(-50%,-50%) scale(1.1);opacity:0.7}
+  60%{transform:translate(-50%,-50%) scale(1.15);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(1.05);opacity:0.8}
+}
+/* Phone: particles spread to viewport edges */
+@media (max-width:500px){
+  .transition-overlay{font-size:24px}
 }
 </style>
 </head>
@@ -298,12 +302,18 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
 
+      // Calculate viewport center for particle burst
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      var spreadX = Math.max(vw * 0.3, 200);
+      var spreadY = Math.max(vh * 0.25, 150);
+
       // Phase 1: Shatter the card — particles burst from card position
       var count = 40;
       for(var i=0; i<count; i++){
         var p = document.createElement('div');
         p.style.cssText = [
-          'position:absolute',
+          'position:fixed',
           'left:' + cx + 'px',
           'top:' + cy + 'px',
           'width:' + (3+Math.random()*14) + 'px',
@@ -313,8 +323,8 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
           'pointer-events:none',
           'animation:shatterBurst 0.5s cubic-bezier(.25,.46,.45,.94) forwards',
           'animation-delay:' + (Math.random()*0.15) + 's',
-          '--dx:' + ((Math.random()-0.5)*500) + 'px',
-          '--dy:' + ((Math.random()-0.5)*500) + 'px',
+          '--dx:' + ((Math.random()-0.5)*spreadX*2) + 'px',
+          '--dy:' + ((Math.random()-0.5)*spreadY*2) + 'px',
           '--rot:' + (Math.random()*720-360) + 'deg'
         ].join(';');
         overlay.appendChild(p);
@@ -323,12 +333,12 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
       // Phase 2 (0.45s delay): Subject label zooms in from center
       var zoom = document.createElement('div');
       zoom.style.cssText = [
-        'position:absolute',
-        'left:50%',
-        'top:50%',
+        'position:fixed',
+        'left:50vw',
+        'top:50vh',
         'transform:translate(-50%,-50%) scale(0.05)',
         'color:white',
-        'font-size:36px',
+        'font-size:' + (vw < 500 ? '24px' : '36px') + '',
         'font-weight:800',
         'font-family:"Noto Serif SC","STSong",serif',
         'white-space:nowrap',
