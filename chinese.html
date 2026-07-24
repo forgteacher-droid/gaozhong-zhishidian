@@ -179,8 +179,8 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:4px 14px;margin:10px 0 20px}
 .vocab-item{display:flex;align-items:flex-start;gap:8px;padding:5px 8px;border-radius:4px;font-size:14px;transition:background .15s;word-break:break-word;overflow-wrap:break-word}
 .vocab-item:hover{background:var(--bg-hover)}
-.vocab-word{font-weight:700;color:#C44D6A;white-space:nowrap;min-width:70px;flex-shrink:0}
-.vocab-def{color:var(--text-muted);font-size:13px;line-height:1.55}
+.vocab-word{font-weight:400;color:var(--text-muted);font-size:12px;min-width:60px;flex-shrink:0;white-space:nowrap;letter-spacing:.02em}
+.vocab-def{font-weight:600;font-size:14px;color:var(--text);line-height:1.55}
 .sy-table{width:100%;border-collapse:collapse;margin:10px 0 20px;font-size:14px}
 .sy-table th{text-align:left;padding:7px 10px;border-bottom:2px solid var(--border);font-size:13px;font-weight:700;color:var(--text-muted)}
 .sy-table td{padding:6px 10px;border-bottom:1px solid var(--border-light)}
@@ -319,11 +319,12 @@ sup{top:-0.5em}
     transition:background .15s;
   }
   .vocab-word{
-    font-weight:700;font-size:14px;color:var(--english);
-    margin-bottom:3px;white-space:normal;min-width:auto;
+    font-weight:400;font-size:11px;color:var(--text-muted);
+    margin-bottom:2px;white-space:normal;min-width:auto;
+    letter-spacing:.02em;
   }
   .vocab-def{
-    font-size:12px;color:var(--text-muted);line-height:1.6;
+    font-weight:600;font-size:13px;color:var(--text);line-height:1.6;
   }
   
   /* Tables */
