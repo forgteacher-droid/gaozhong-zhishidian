@@ -104,10 +104,6 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 }
 .home-btn:hover{background:var(--bg-hover);color:var(--text)}
 .home-btn .hb-icon{font-size:16px}
-@media (max-width:500px){
-  .home-btn{padding:5px 10px;font-size:13px}
-  .home-btn .hb-icon{font-size:14px}
-}
 
 /* Layout */
 .app-layout{display:flex;min-height:calc(100vh - 56px)}
@@ -223,62 +219,8 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 }
 
 /* Phone: ≤500px */
-@media (max-width:500px){
-  :root{--header-h:48px}
-  .site-header{height:48px;padding:0 10px;gap:8px}
-  .site-logo{font-size:14px}
-  .site-logo span{display:none}
-  .nav-toc-toggle{font-size:13px;padding:5px 12px}
-  .theme-toggle{width:32px;height:32px}
-  .theme-toggle svg{width:16px;height:16px}
-
-  .main-content{padding:14px 14px 110px}
-
-  /* Hero */
-  .subject-hero{padding:8px 0 14px;margin-bottom:18px}
-  .subject-hero-icon{font-size:28px;margin-bottom:4px}
-  .subject-hero h2{font-size:22px}
-  .subject-hero-desc{font-size:13px}
-
-  /* Typography */
-  .sec-title{font-size:18px;margin:24px 0 10px;padding-left:8px;line-height:1.35}
-  .sub-title{font-size:15px;margin:14px 0 6px}
-  .block-hdr{font-size:11px;margin:12px 0 4px;letter-spacing:.02em}
-  .cp,.cp-core,.cp-exp,.cp-rule,.cp-trap{font-size:13.5px;line-height:1.65;margin:4px 0}
-  .ex-sent{font-size:13px;padding:6px 10px;margin:4px 0}
-
-  /* Vocab: single column */
-  .vocab-grid{grid-template-columns:1fr;gap:2px 0;margin:6px 0 14px}
-  .vocab-item{padding:5px 8px;font-size:13px;border-radius:3px}
-  .vocab-word{min-width:55px;font-size:13px}
-  .vocab-def{font-size:12px}
-
-  /* Shengyi table: scrollable */
-  .sy-table{font-size:12px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;-webkit-transform:translateZ(0)}
-  .sy-table th,.sy-table td{padding:5px 7px;white-space:nowrap}
-  .sy-table th{font-size:11px}
-
-  /* Back to top */
-  .back-top{bottom:80px;right:12px;width:36px;height:36px;font-size:16px}
-
-  /* Bottom nav */
-  .bottom-nav{padding:5px 2px}
-  .bottom-nav-btn{font-size:9px;padding:3px 4px;min-width:42px;min-height:40px;gap:1px}
-  .bottom-nav-btn .bn-icon{font-size:16px}
-
-  /* Sidebar overlay */
-  .sidebar-toc.active{width:85vw;max-width:300px}
-}
 
 /* Extra small: ≤380px */
-@media (max-width:380px){
-  .main-content{padding:11px 10px 105px}
-  .sec-title{font-size:17px;margin:20px 0 8px}
-  .subject-hero h2{font-size:20px}
-  .subject-hero-icon{font-size:24px}
-  .bottom-nav-btn{font-size:8px;min-width:38px;padding:2px 3px}
-  .bottom-nav-btn .bn-icon{font-size:15px}
-}
 
 /* Touch-friendly: interactive targets ≥ 44px */
 @media (pointer:coarse){
@@ -326,34 +268,94 @@ sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
 sub{bottom:-0.25em}
 sup{top:-0.5em}
 
-@media (max-width:500px){
-  .search-overlay{padding-top:0;align-items:stretch}
-  .search-modal{width:100%;max-width:100%;border-radius:0;border:none;height:100vh;display:flex;flex-direction:column}
-  .search-input-wrap{padding:12px 16px}
-  .search-results{max-height:none;flex:1}
-  .search-input-wrap kbd{display:none}
-}
-
 /* Menu button */
 .menu-btn{display:none;width:36px;height:36px;align-items:center;justify-content:center;border-radius:50%;border:none;background:none;cursor:pointer;color:var(--text-muted);font-size:18px}
 .menu-btn:hover{background:var(--bg-hover);color:var(--text)}
 @media (max-width:860px){.menu-btn{display:flex}}
 
 
+/* ===== MOBILE OPTIMIZATION (≤500px) ===== */
 @media (max-width:500px){
-  .vocab-item{gap:6px;align-items:flex-start}
-  .vocab-word{min-width:48px;font-size:12px}
-  .vocab-def{font-size:11px;line-height:1.45}
-  /* Prevent text overlap in content blocks */
-  .content-block,.cp,.cp-core,.cp-exp,.cp-rule,.cp-trap{line-height:1.65;overflow-wrap:break-word;word-break:break-word}
-  /* Sub/sup within content */
-  .content-block sub,.content-block sup{font-size:70%}
-  /* Ensure all text containers have proper line height */
-  .ex-sent{font-size:12px;line-height:1.6;padding:6px 10px}
-  /* Prevent table overflow */
-  .sy-table,.shengyi-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  /* Sidebar sub-links */
-  .toc-sub-link{font-size:13px;padding:5px 10px;line-height:1.4}
+  :root{--header-h:48px}
+  
+  /* Header */
+  .site-header{height:48px;padding:0 10px;gap:8px}
+  .site-logo{font-size:14px}
+  .site-logo span{display:none}
+  .home-btn{padding:5px 10px;font-size:13px}
+  .home-btn .hb-icon{font-size:14px}
+  .nav-toc-toggle{font-size:13px;padding:5px 12px}
+  .search-toggle,.theme-toggle{width:32px;height:32px;min-width:32px;min-height:32px}
+  
+  /* Layout */
+  .sidebar-toc{width:85vw;max-width:300px}
+  .main-content{padding:14px 14px 110px;max-width:100%}
+  
+  /* Hero */
+  .subject-hero{padding:8px 0 14px;margin-bottom:18px}
+  .subject-hero-icon{font-size:28px;margin-bottom:4px}
+  .subject-hero h2{font-size:22px;line-height:1.3}
+  .subject-hero-desc{font-size:13px;line-height:1.5}
+  
+  /* Section headings */
+  .sec-title{font-size:18px;margin:24px 0 10px;padding-left:8px;line-height:1.4}
+  .sub-title{font-size:15px;margin:14px 0 6px;line-height:1.4}
+  
+  /* Block headers */
+  .block-hdr{font-size:12px;margin:14px 0 4px;letter-spacing:.02em}
+  
+  /* Content blocks - ensure readability */
+  .cp,.cp-core,.cp-exp,.cp-rule,.cp-trap,.content-block{
+    font-size:14px;line-height:1.75;margin:4px 0;
+    overflow-wrap:break-word;word-break:break-word;
+    padding-right:4px;
+  }
+  .cp-core,.cp-exp,.cp-rule,.cp-trap{padding-left:8px}
+  
+  /* Example sentences */
+  .ex-sent{font-size:13px;line-height:1.7;padding:6px 10px;margin:4px 0}
+  
+  /* Vocabulary items - clean layout */
+  .vocab-grid{grid-template-columns:1fr;gap:2px 0;margin:6px 0 14px}
+  .vocab-item{padding:6px 10px;font-size:13px;gap:8px;align-items:flex-start;line-height:1.55}
+  .vocab-word{min-width:50px;font-size:13px;flex-shrink:0}
+  .vocab-def{font-size:12px;line-height:1.55}
+  
+  /* Tables */
+  .sy-table,.shengyi-table{font-size:12px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .sy-table th,.sy-table td,.shengyi-table th,.shengyi-table td{padding:5px 7px;white-space:nowrap}
+  
+  /* Sidebar */
+  .toc-subject summary{font-size:15px;padding:8px 16px;min-height:44px}
+  .toc-section a{font-size:13px;padding:5px 10px;min-height:40px;line-height:1.4}
+  .toc-sub-link{font-size:12px;padding:5px 10px 5px 24px;line-height:1.4}
+  
+  /* Search */
+  .search-overlay{padding-top:0;align-items:stretch}
+  .search-modal{width:100%;max-width:100%;border-radius:0;border:none;height:100vh;display:flex;flex-direction:column}
+  .search-input-wrap{padding:12px 16px}
+  .search-results{max-height:none;flex:1}
+  .search-result{padding:12px 16px}
+  .search-input-wrap kbd{display:none}
+  
+  /* Sub/sup formatting */
+  sub,sup{font-size:70%}
+  
+  /* Bottom nav */
+  .bottom-nav{padding:5px 2px}
+  .bottom-nav-btn{font-size:9px;padding:3px 4px;min-width:42px;min-height:40px;gap:1px}
+  .bottom-nav-btn .bn-icon{font-size:15px}
+  
+  /* Back to top */
+  .back-top{bottom:80px;right:12px;width:36px;height:36px;font-size:16px}
+}
+
+@media (max-width:380px){
+  .main-content{padding:11px 10px 105px}
+  .sec-title{font-size:17px}
+  .subject-hero h2{font-size:20px}
+  .subject-hero-icon{font-size:24px}
+  .bottom-nav-btn{font-size:8px;min-width:38px;padding:2px 3px}
 }
 
 </style>
@@ -395,7 +397,6 @@ sup{top:-0.5em}
     <div class="search-results" id="searchResults"></div>
   </div>
 </div>
-
 
 <script>
 // ===== DATA =====
@@ -633,7 +634,6 @@ function setupBottomNav(){
 
 // ===== SEARCH =====
 
-
 function setupSearch(){
   var overlay = document.getElementById('searchOverlay');
   var input = document.getElementById('searchInput');
@@ -696,19 +696,15 @@ function setupSearch(){
   }
 }
 
-
-
 function closeSearch(){
   document.getElementById('searchOverlay').classList.remove('open');
   document.getElementById('searchInput').value = '';
   document.getElementById('searchResults').innerHTML = '';
 }
 
-
 document.addEventListener('keydown', function(e){
   if((e.ctrlKey || e.metaKey) && e.key === 'k'){ e.preventDefault(); document.getElementById('searchToggle').click(); }
 });
-
 
 // ===== CROSS-SUBJECT SEARCH =====
 const ALL_SUBJECTS = ['chinese','math','english','physics','chemistry','biology'];
