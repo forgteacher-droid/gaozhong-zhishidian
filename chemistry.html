@@ -272,10 +272,12 @@ sup{top:-0.5em}
 @media (max-width:860px){.menu-btn{display:flex}}
 
 /* ===== MOBILE OPTIMIZATION (≤500px) ===== */
+
+
+/* ===== MOBILE OPTIMIZATION (≤500px) ===== */
 @media (max-width:500px){
   :root{--header-h:48px}
   
-  /* Header */
   .site-header{height:48px;padding:0 10px;gap:8px}
   .site-logo{font-size:14px}
   .site-logo span{display:none}
@@ -284,50 +286,52 @@ sup{top:-0.5em}
   .nav-toc-toggle{font-size:13px;padding:5px 12px}
   .search-toggle,.theme-toggle{width:32px;height:32px;min-width:32px;min-height:32px}
   
-  /* Layout */
   .sidebar-toc{width:85vw;max-width:300px}
   .main-content{padding:14px 14px 110px;max-width:100%}
   
-  /* Hero */
   .subject-hero{padding:8px 0 14px;margin-bottom:18px}
   .subject-hero-icon{font-size:28px;margin-bottom:4px}
   .subject-hero h2{font-size:22px;line-height:1.3}
   .subject-hero-desc{font-size:13px;line-height:1.5}
   
-  /* Section headings */
   .sec-title{font-size:18px;margin:24px 0 10px;padding-left:8px;line-height:1.4}
-  .sub-title{font-size:15px;margin:14px 0 6px;line-height:1.4}
-  
-  /* Block headers */
+  .sub-title{font-size:15px;margin:16px 0 8px;line-height:1.4}
   .block-hdr{font-size:12px;margin:14px 0 4px;letter-spacing:.02em}
   
-  /* Content blocks - ensure readability */
+  /* Content blocks */
   .cp,.cp-core,.cp-exp,.cp-rule,.cp-trap,.content-block{
-    font-size:14px;line-height:1.75;margin:4px 0;
+    font-size:14px;line-height:1.8;margin:5px 0;
     overflow-wrap:break-word;word-break:break-word;
-    padding-right:4px;
   }
   .cp-core,.cp-exp,.cp-rule,.cp-trap{padding-left:8px}
   
-  /* Example sentences */
-  .ex-sent{font-size:13px;line-height:1.7;padding:6px 10px;margin:4px 0}
+  .ex-sent{font-size:13px;line-height:1.7;padding:8px 10px;margin:5px 0}
   
-  /* Vocabulary items - clean layout */
-  .vocab-grid{grid-template-columns:1fr;gap:2px 0;margin:6px 0 14px}
-  .vocab-item{padding:6px 10px;font-size:13px;gap:8px;align-items:flex-start;line-height:1.55}
-  .vocab-word{min-width:50px;font-size:13px;flex-shrink:0}
-  .vocab-def{font-size:12px;line-height:1.55}
+  /* Vocab items - card style on mobile for clarity */
+  .vocab-grid{grid-template-columns:1fr;gap:6px 0;margin:8px 0 16px}
+  .vocab-item{
+    display:flex;flex-direction:column;align-items:flex-start;
+    padding:8px 12px;margin:0;
+    background:var(--bg);border:1px solid var(--border-light);
+    border-radius:8px;font-size:13px;line-height:1.6;
+    transition:background .15s;
+  }
+  .vocab-word{
+    font-weight:700;font-size:14px;color:var(--english);
+    margin-bottom:3px;white-space:normal;min-width:auto;
+  }
+  .vocab-def{
+    font-size:12px;color:var(--text-muted);line-height:1.6;
+  }
   
   /* Tables */
   .sy-table,.shengyi-table{font-size:12px;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
   .sy-table th,.sy-table td,.shengyi-table th,.shengyi-table td{padding:5px 7px;white-space:nowrap}
   
-  /* Sidebar */
   .toc-subject summary{font-size:15px;padding:8px 16px;min-height:44px}
   .toc-section a{font-size:13px;padding:5px 10px;min-height:40px;line-height:1.4}
   .toc-sub-link{font-size:12px;padding:5px 10px 5px 24px;line-height:1.4}
   
-  /* Search */
   .search-overlay{padding-top:0;align-items:stretch}
   .search-modal{width:100%;max-width:100%;border-radius:0;border:none;height:100vh;display:flex;flex-direction:column}
   .search-input-wrap{padding:12px 16px}
@@ -335,15 +339,12 @@ sup{top:-0.5em}
   .search-result{padding:12px 16px}
   .search-input-wrap kbd{display:none}
   
-  /* Sub/sup formatting */
   sub,sup{font-size:70%}
   
-  /* Bottom nav */
   .bottom-nav{padding:5px 2px}
   .bottom-nav-btn{font-size:9px;padding:3px 4px;min-width:42px;min-height:40px;gap:1px}
   .bottom-nav-btn .bn-icon{font-size:15px}
   
-  /* Back to top */
   .back-top{bottom:80px;right:12px;width:36px;height:36px;font-size:16px}
 }
 
@@ -354,6 +355,7 @@ sup{top:-0.5em}
   .subject-hero-icon{font-size:24px}
   .bottom-nav-btn{font-size:8px;min-width:38px;padding:2px 3px}
 }
+
 </style>
 </head>
 <body>
