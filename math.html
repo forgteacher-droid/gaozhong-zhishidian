@@ -165,7 +165,7 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .bh-rule{color:#B8863C}.bh-rule::before{background:#B8863C}
 .bh-trap{color:#C4513B}.bh-trap::before{background:#C4513B}
 .bh-info{color:#6B6B6E}.bh-info::before{background:#6B6B6E}
-.cp{font-size:14.5px;margin:5px 0;padding-left:2px}
+.cp,.cp-core,.cp-exp,.cp-rule,.cp-trap{font-size:14.5px;margin:4px 0;line-height:1.7;overflow-wrap:break-word;word-break:break-word}
 .cp-core{border-left:2px solid #3A7D8C;padding-left:10px;border-radius:0 4px 4px 0}
 .cp-exp{border-left:2px solid #4A7C59;padding-left:10px;border-radius:0 4px 4px 0}
 .cp-rule{border-left:2px solid #B8863C;padding-left:10px;border-radius:0 4px 4px 0}
@@ -175,10 +175,10 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 
 /* Vocabulary */
 .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:4px 14px;margin:10px 0 20px}
-.vocab-item{display:flex;align-items:baseline;gap:8px;padding:4px 8px;border-radius:4px;font-size:14px;transition:background .15s}
+.vocab-item{display:flex;align-items:flex-start;gap:8px;padding:5px 8px;border-radius:4px;font-size:14px;transition:background .15s;word-break:break-word;overflow-wrap:break-word}
 .vocab-item:hover{background:var(--bg-hover)}
-.vocab-word{font-weight:700;color:#C44D6A;white-space:nowrap;min-width:70px}
-.vocab-def{color:var(--text-muted);font-size:13px}
+.vocab-word{font-weight:700;color:var(--english);white-space:nowrap;min-width:70px;flex-shrink:0}
+.vocab-def{color:var(--text-muted);font-size:13px;line-height:1.55}
 .sy-table{width:100%;border-collapse:collapse;margin:10px 0 20px;font-size:14px}
 .sy-table th{text-align:left;padding:7px 10px;border-bottom:2px solid var(--border);font-size:13px;font-weight:700;color:var(--text-muted)}
 .sy-table td{padding:6px 10px;border-bottom:1px solid var(--border-light)}
@@ -332,6 +332,23 @@ sup{top:-0.5em}
 .menu-btn{display:none;width:36px;height:36px;align-items:center;justify-content:center;border-radius:50%;border:none;background:none;cursor:pointer;color:var(--text-muted);font-size:18px}
 .menu-btn:hover{background:var(--bg-hover);color:var(--text)}
 @media (max-width:860px){.menu-btn{display:flex}}
+
+
+@media (max-width:500px){
+  .vocab-item{gap:6px;align-items:flex-start}
+  .vocab-word{min-width:48px;font-size:12px}
+  .vocab-def{font-size:11px;line-height:1.45}
+  /* Prevent text overlap in content blocks */
+  .content-block,.cp,.cp-core,.cp-exp,.cp-rule,.cp-trap{line-height:1.65;overflow-wrap:break-word;word-break:break-word}
+  /* Sub/sup within content */
+  .content-block sub,.content-block sup{font-size:70%}
+  /* Ensure all text containers have proper line height */
+  .ex-sent{font-size:12px;line-height:1.6;padding:6px 10px}
+  /* Prevent table overflow */
+  .sy-table,.shengyi-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* Sidebar sub-links */
+  .toc-sub-link{font-size:13px;padding:5px 10px;line-height:1.4}
+}
 
 </style>
 </head>
