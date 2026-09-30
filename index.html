@@ -102,6 +102,22 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
   letter-spacing:.04em;
 }
 
+/* Download button */
+.download-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:16px;padding:10px 24px;border-radius:24px;
+  background:var(--bg);border:1.5px solid var(--chemistry);
+  color:var(--chemistry);font-size:14px;font-weight:600;
+  text-decoration:none;cursor:pointer;
+  transition:all .25s;
+}
+.download-btn:hover{
+  background:var(--chemistry);color:white;
+  transform:translateY(-2px);
+  box-shadow:0 4px 14px rgba(45,123,140,.25);
+}
+.download-btn .db-icon{font-size:16px}
+
 /* Mobile */
 @media (max-width:500px){
   h1{font-size:28px;margin-bottom:36px}
@@ -187,6 +203,9 @@ html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
     </a>
   </div>
   <div class="footer">FROG 教育 · 助力高考</div>
+  <a href="download.html" class="download-btn">
+    <span class="db-icon">📥</span> 下载学科文件
+  </a>
 </div>
 
 <!-- Frog SVG - side view silhouette -->

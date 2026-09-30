@@ -359,6 +359,16 @@ sup{top:-0.5em}
   .bottom-nav-btn{font-size:8px;min-width:38px;padding:2px 3px}
 }
 
+
+/* Vertical fraction */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 2px;line-height:1.15}
+.fnum{display:block;border-bottom:1px solid currentColor;padding:0 4px;font-size:0.85em}
+.fden{display:block;padding:0 4px;font-size:0.85em}
+@media (max-width:500px){
+  .frac{margin:0 1px}
+  .fnum,.fden{padding:0 2px;font-size:0.8em}
+}
+
 </style>
 </head>
 <body>

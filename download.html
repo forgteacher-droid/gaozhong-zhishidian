@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下载学科资料 — 高中知识点集合</title>
+<meta name="description" content="下载高中语文、数学、英语、物理、化学、生物六科知识点Word文件">
+<style>
+:root {
+  --bg: #fafaf8;
+  --text: #1a1a1c;
+  --text-muted: #6b6b6e;
+  --chinese: #C4523B;
+  --math: #4E5283;
+  --english: #C44D6A;
+  --physics: #B87D3C;
+  --chemistry: #2D7B8C;
+  --biology: #3D7A4A;
+}
+html.dark {
+  --bg: #1a1b1e;
+  --text: #e8e6e0;
+  --text-muted: #a0a0a4;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  -webkit-font-smoothing:antialiased;
+  transition:background .3s,color .3s;
+}
+.container{text-align:center;padding:40px 24px;max-width:720px;width:100%}
+h1{
+  font-family:"Noto Serif SC","STSong","Songti SC",Georgia,serif;
+  font-size:32px;font-weight:800;letter-spacing:.04em;margin-bottom:8px;
+}
+.subtitle{font-size:14px;color:var(--text-muted);margin-bottom:40px}
+.grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  justify-items:center;
+}
+.card{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:140px;height:140px;border-radius:18px;
+  background:var(--bg);border:1px solid #e2ded6;
+  cursor:pointer;text-decoration:none;color:var(--text);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+html.dark .card{border-color:#3a3b3f;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.card:hover{transform:scale(1.12);box-shadow:0 8px 30px rgba(0,0,0,.1)}
+.card-icon{font-size:40px;margin-bottom:8px;transition:transform .3s}
+.card:hover .card-icon{transform:scale(1.1)}
+.card-label{font-size:17px;font-weight:600;letter-spacing:.03em}
+.card-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+
+/* Theme toggle */
+.theme-toggle{
+  position:fixed;top:16px;right:16px;z-index:10;
+  width:36px;height:36px;border-radius:50%;border:none;background:none;
+  cursor:pointer;color:var(--text-muted);font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.theme-toggle:hover{background:rgba(0,0,0,.05)}
+html.dark .theme-toggle:hover{background:rgba(255,255,255,.05)}
+
+/* Back button */
+.back-btn{
+  position:fixed;top:16px;left:16px;z-index:10;
+  padding:8px 16px;border-radius:20px;border:1px solid #e2ded6;
+  background:var(--bg);color:var(--text-muted);font-size:14px;
+  cursor:pointer;text-decoration:none;
+  display:flex;align-items:center;gap:6px;
+  transition:all .2s;
+}
+.back-btn:hover{background:var(--bg);color:var(--text);border-color:#b0aca4}
+html.dark .back-btn{border-color:#3a3b3f}
+.back-btn .arrow{font-size:18px}
+
+/* Footer */
+.footer{
+  margin-top:48px;font-size:12px;color:var(--text-muted);
+  letter-spacing:.04em;
+}
+
+/* Download hint */
+.download-hint{
+  margin-top:20px;font-size:12px;color:var(--text-muted);
+  opacity:.7;
+}
+
+/* Mobile */
+@media (max-width:500px){
+  h1{font-size:24px;margin-bottom:6px}
+  .subtitle{font-size:13px;margin-bottom:28px}
+  .grid{gap:14px}
+  .card{width:100px;height:100px;border-radius:14px}
+  .card-icon{font-size:30px}
+  .card-label{font-size:14px}
+  .card-sub{font-size:10px}
+  .back-btn{padding:6px 12px;font-size:13px}
+}
+@media (max-width:360px){
+  .grid{grid-template-columns:repeat(3,1fr);gap:10px}
+  .card{width:88px;height:88px}
+  .card-icon{font-size:26px}
+  .card-label{font-size:13px}
+}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-btn"><span class="arrow">←</span> 返回选科</a>
+<button class="theme-toggle" id="themeToggle" aria-label="切换主题" title="切换暗色模式">🌓</button>
+
+<div class="container">
+  <h1>下载学科资料</h1>
+  <p class="subtitle">点击学科按钮下载对应的 Word 文件</p>
+  <div class="grid">
+    <a href="output/高中语文知识点.docx" download class="card" style="border-bottom:3px solid var(--chinese)">
+      <span class="card-icon">📝</span>
+      <span class="card-label" style="color:var(--chinese)">语文</span>
+      <span class="card-sub">高中语文知识点.docx</span>
+    </a>
+    <a href="output/高中数学知识点.docx" download class="card" style="border-bottom:3px solid var(--math)">
+      <span class="card-icon">📐</span>
+      <span class="card-label" style="color:var(--math)">数学</span>
+      <span class="card-sub">高中数学知识点.docx</span>
+    </a>
+    <a href="output/高中英语知识点.docx" download class="card" style="border-bottom:3px solid var(--english)">
+      <span class="card-icon">📖</span>
+      <span class="card-label" style="color:var(--english)">英语</span>
+      <span class="card-sub">高中英语知识点.docx</span>
+    </a>
+    <a href="output/高中物理知识点.docx" download class="card" style="border-bottom:3px solid var(--physics)">
+      <span class="card-icon">⚡</span>
+      <span class="card-label" style="color:var(--physics)">物理</span>
+      <span class="card-sub">高中物理知识点.docx</span>
+    </a>
+    <a href="output/高中化学知识点.docx" download class="card" style="border-bottom:3px solid var(--chemistry)">
+      <span class="card-icon">⚗️</span>
+      <span class="card-label" style="color:var(--chemistry)">化学</span>
+      <span class="card-sub">高中化学知识点.docx</span>
+    </a>
+    <a href="output/高中生物知识点.docx" download class="card" style="border-bottom:3px solid var(--biology)">
+      <span class="card-icon">🧬</span>
+      <span class="card-label" style="color:var(--biology)">生物</span>
+      <span class="card-sub">高中生物知识点.docx</span>
+    </a>
+  </div>
+  <div class="download-hint">点击即可下载，文件格式为 .docx（Word 文档）</div>
+  <div class="footer">FROG 教育 · 助力高考</div>
+</div>
+
+<script>
+// Theme toggle
+(function(){
+  var btn = document.getElementById('themeToggle');
+  function setTheme(dark){
+    document.documentElement.classList.toggle('dark',dark);
+    btn.textContent = dark ? '☀️' : '🌓';
+    try{localStorage.setItem('home-theme',dark?'dark':'light')}catch(e){}
+  }
+  var saved = localStorage.getItem('home-theme');
+  if(saved){setTheme(saved==='dark')}
+  else{setTheme(window.matchMedia('(prefers-color-scheme:dark)').matches)}
+  btn.onclick = function(){setTheme(!document.documentElement.classList.contains('dark'))};
+})();
+</script>
+</body>
+</html>
