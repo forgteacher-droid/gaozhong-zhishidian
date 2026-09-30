@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://frog-education.github.io/web/sitemap.xml
+Sitemap: https://frogeducation.github.io/sitemap.xml
