@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://frogeducation.github.io/sitemap.xml
+Sitemap: https://www.konwlegde.online/sitemap.xml
